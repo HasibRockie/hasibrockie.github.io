@@ -136,6 +136,21 @@ blockquote {
   margin: 0 0 1rem;
 }
 
+
+.custom-card:hover{
+  transform: scale(1.1);
+  transition: 500ms;
+}
+
+.custom-card{
+  transform: scale(1);
+  transition: 500ms;
+}
+
+
+
+
+
 b,
 strong {
   font-weight: bolder;
