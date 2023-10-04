@@ -12230,6 +12230,14 @@ pre .code {
     margin: auto;
     margin-bottom: 20px;
   }
+
+  .about-caption {
+    -webkit-box-flex: 1;
+    -webkit-flex-grow: 1;
+        -ms-flex-positive: 1;
+            flex-grow: 1;
+    text-align: left;
+  }
 }
 
 /* sections */
