@@ -12171,6 +12171,14 @@ pre .code {
   .header-content {
     padding-left: calc(100% / 5) !important;
   }
+
+  .about-caption {
+    -webkit-box-flex: 1;
+    -webkit-flex-grow: 1;
+        -ms-flex-positive: 1;
+            flex-grow: 1;
+    text-align: left;
+  }
 }
 
 .about {
