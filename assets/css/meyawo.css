@@ -11428,12 +11428,23 @@ p {
   max-width: 350px;
 }
 
+
+.fiction-card-header {
+  min-width: 350px;
+  max-width: 350px;
+  min-height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 10px;
+}
+
 .blog-card-img {
   border-radius: 0 0 0 0;
   width: 100%;
-  height: 100%;
+  /* height: 100%;
   -o-object-fit: cover;
-     object-fit: cover;
+     object-fit: cover; */
 }
 
 .blog-card-body {
