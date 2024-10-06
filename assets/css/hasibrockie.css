@@ -68,6 +68,10 @@ li{
   font-weight: 600 !important;
 }
 
+.just {
+  text-align: justify;
+}
+
 [tabindex="-1"]:focus {
   outline: 0 !important;
 }
