@@ -1,0 +1,14 @@
+[
+    {
+        "title": "Post 1 Title",
+        "url": "posts/post1.html",
+        "date": "2024-01-01",
+        "summary": "This is a summary of the first post."
+    },
+    {
+        "title": "Post 2 Title",
+        "url": "posts/post2.html",
+        "date": "2024-01-15",
+        "summary": "This is a summary of the second post."
+    }
+]
