@@ -1,0 +1,6 @@
+title: "Hasib Rockie's Blog"
+description: "A personal blog by Hasib Rockie."
+theme: minima
+markdown: kramdown
+plugins:
+  - jekyll-feed
