@@ -1151,6 +1151,14 @@
         </div><!-- end of container -->
     </section> <!-- end of portfolio section -->
 
+
+            {% for post in site.categories.personal %}
+            <h2>{{ post.title }}</h2>
+            <p>{{ post.excerpt }}</p>
+            {% endfor %}
+
+
+
     <!-- footer -->
     <div class="container">
         <footer class="footer">       
