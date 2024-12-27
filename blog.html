@@ -1,14 +1,145 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog</title>
-    <link rel="stylesheet" href="assets/css/styles.css">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Md Hasibul Islam's personal portfolio showcasing personal infos, skills, projects, posts and professional experience.">
+    <meta name="author" content="Hasib Rockie">
+    <meta name="keywords" content="Hasib Rockie, Hasibmania, Hasibify, Md Hasibul Islam, portfolio, projects, blogs, github.io, buet, hasib buet, buet short memories, hasib rockie mechanical, buet mechanical, md hasibul islam buet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.maateen.me/solaiman-lipi/font.css" rel="stylesheet">
+    <!-- favicon -->
+    <link rel="icon" href="assets/imgs/hasib-logo.png" type="image/png">
+    <!-- font icons -->
+    <link rel="stylesheet" href="assets/vendors/themify-icons/css/themify-icons.css">
+  <title>Hasib Rockie - Posts</title>
+  <link rel="stylesheet" href="assets/css/hasibrockie.css">
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <link rel="stylesheet" href="assets/css/blog.css">
 </head>
 <body>
-    <h1>Blog</h1>
-    <ul id="blog-list"></ul>
-    <script src="assets/js/blog.js"></script>
+
+    <!-- Page Navbar -->
+    <nav class="custom-navbar" data-spy="affix" data-offset-top="20">
+        <div class="container">
+            <a class="logo" href="/">
+                <img src="assets/imgs/hasib-logo.png" alt="Hasib Rockie" class="hasib-logo">
+            </a>         
+            <ul class="nav">
+                <li class="item">
+                    <a class="link" href="#home">Home</a>
+                </li>
+                <li class="item">
+                    <a class="link" href="#about">About</a>
+                </li>
+                <li class="item">
+                    <a class="link" href="#education">Education</a>
+                </li>
+                <li class="item">
+                    <a class="link" href="#works">Work Experiences</a>
+                </li>
+                <li class="item">
+                    <a class="link" href="#skills">Skills</a>
+                </li>
+                <li class="item">
+                    <a class="link" href="#projects">Projects</a>
+                </li>
+               
+                <li class="item">
+                    <a class="link" href="#non-academic">Others Projects</a>
+                </li>
+                <li class="item">
+                    <a class="link" href="#portfolio">Achievements</a>
+                </li>
+                <li class="item">
+                    <a class="link" href="#writings">Blogs/Fiction</a>
+                </li>
+                <li class="item">
+                    <a class="link" href="#hobby">Hobbies</a>
+                </li>
+                <li class="item">
+                    <a class="link" href="#photos">Photos</a>
+                </li>
+                
+            </ul>
+            <a href="javascript:void(0)" id="nav-toggle" class="hamburger hamburger--elastic">
+                <div class="hamburger-box">
+                  <div class="hamburger-inner"></div>
+                </div>
+            </a>
+        </div>          
+    </nav><!-- End of Page Navbar -->
+
+    <!-- page header -->
+    <header id="home" class="header">
+        <div class="overlay"></div>
+        <div class="header-content container">
+            <h1 class="header-title">
+                <span class="up">HI!</span>
+                <span class="down">I am <br> Md Hasibul Islam</span>
+            </h1>
+            <p class="header-subtitle">DREAMER | LEARNER | ADVENTURER | ENGINEER</p>            
+
+            <button class="btn btn-primary"><a target="_blank" style="text-deacoration:none;color:white!important;"  href="https://drive.google.com/file/d/10qcQ9t6i6HuDkok53S7IoJO_uZpmjUEj/view">Download Resume</a></button>
+        </div>              
+    </header><!-- end of page header -->
+
+
+  <div id="loading" style="display: none;">
+    <div class="spinner-grow" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+    <h3>LOADING...</h3>
+  </div>
+
+  <div class="tab-inside">
+      <h3>All Posts</h3>
+    <div id="tabs">
+    </div>
+    <div id="all-posts" class="posts-container"></div>
+  </div>
+
+    <br><br><br>
+  
+    <!-- footer -->
+    <div class="container">
+        <footer class="footer">       
+            <p class="mb-0"><a href="https://hasibrockie.github.io/">Hasib</a>  &copy; <script>document.write(new Date().getFullYear())</script> </p>
+            <div class="social-links text-right m-auto ml-sm-auto">
+                <a target="_blank" href="https://www.facebook.com/Hasib.Loser/" class="link"><i class="ti-facebook"></i></a>
+                <a target="_blank" href="https://github.com/hasibRockie/" class="link"><i class="ti-github"></i></a>
+                <a target="_blank" href="https://www.linkedin.com/in/hasib009/" class="link"><i class="ti-linkedin"></i></a>
+                <a target="_blank" href="https://hasibmania.web.app/" class="link"><i class="ti-bookmark-alt"></i></a>
+                <a target="_blank" href="https://md-hasibul-islam.netlify.app/" class="link"><i class="ti-world"></i></a>
+            </div>
+        </footer>
+    </div> <!-- end of page footer -->
+	
+	<!-- core  -->
+    <script src="assets/vendors/jquery/jquery-3.4.1.js"></script>
+    <script src="assets/vendors/bootstrap/bootstrap.bundle.js"></script>
+
+    <!-- bootstrap 3 affix -->
+	<script src="assets/vendors/bootstrap/bootstrap.affix.js"></script>
+
+    <!-- Meyawo js -->
+    <script src="assets/js/meyawo.js"></script>
+
+    <script>
+        {
+            "@context": "https://schema.org",
+            "@type": "Person",
+            "name": "Hasib Rockie",
+            "url": "https://hasibrockie.github.io",
+            "sameAs": [
+              "https://github.com/HasibRockie",
+              "https://www.linkedin.com/in/hasib009/"
+            ]
+          }
+    </script>
+
+  <script src="assets/js/blog.js"></script>
 </body>
 </html>
