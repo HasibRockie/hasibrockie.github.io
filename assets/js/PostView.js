@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           <small class="post-meta">
              • পোস্ট নংঃ ${toBn(post.id.toString())} • ক্যাটেগরিঃ ${post.category} • তারিখঃ ${toBn(post.date)}  • লেখকঃ ${post.author} • 
           </small> <hr>
-          <img src="${baseURL + post.img1}" alt="${post.title}" class="banner"> <br> <br>
+          <img src="${baseURL + post.img1}" alt="Hasib Rockie" class="banner"> <br> <br>
           <p class="post-content">${post.para1}</p>
           <p class="post-content">${post.para2 || ""}</p>
           <p class="post-content">${post.para3 || ""}</p> 
