@@ -1,0 +1,37 @@
+.post-card {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #fff;
+    margin-bottom: 20px;
+}
+.post-card img {
+    max-height: 200px;
+    object-fit: cover;
+    width: 100%;
+}
+.post-content {
+    padding: 15px;
+}
+.post-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+.post-meta {
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+
+.memo{
+    display: grid;
+    grid-template-columns: repeat(2,1fr) !important;
+}
+
+
+@media screen and (max-width: 768px) {
+    .memo{
+        grid-template-columns: repeat(1, 1fr) !important;
+    }
+    
+}

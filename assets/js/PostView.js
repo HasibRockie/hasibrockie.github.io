@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   
     const fetchPost = async (id) => {
       try {
-        const response = await fetch("data/posts.json");
+        const response = await fetch("../data/posts.json");
         const data = await response.json();
         return data.find((post) => post.id.toString() === id);
       } catch (error) {
@@ -43,8 +43,8 @@ document.addEventListener("DOMContentLoaded", async () => {
           <p class="post-content">${post.para1}</p>
           <p class="post-content">${post.para2 || ""}</p>
           <p class="post-content">${post.para3 || ""}</p> 
-          <div class="images">
           <br>
+          <div class="images">
             ${post.img2 ? `<div><img src="${baseURL + post.img2}" alt="${post.title}" class="post-image"> </div>` : ''}
             ${post.img3 ? `<div><img src="${baseURL + post.img3}" alt="${post.title}" class="post-image"> </div>` : ''}
             ${post.img4 ? `<div><img src="${baseURL + post.img4}" alt="${post.title}" class="post-image"> </div>` : ''}
@@ -54,8 +54,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             ${post.img8 ? `<div><img src="${baseURL + post.img8}" alt="${post.title}" class="post-image"> </div>` : ''}
             ${post.img9 ? `<div><img src="${baseURL + post.img9}" alt="${post.title}" class="post-image"> </div>` : ''}
             ${post.img10 ? `<div><img src="${baseURL + post.img10}" alt="${post.title}" class="post-image"> </div>` : ''}
+            </div>
             <br>
-          </div>
           
             <p class="post-content">${post.para4 || ""}</p>
             <p class="post-content">${post.para5 || ""}</p>

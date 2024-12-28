@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
     
     const getPosts = async () => {
       try {
-        const response = await fetch("data/posts.json");
+        const response = await fetch("../data/posts.json");
         const data = await response.json();
         posts = data;
         personals = data.filter((post) => post.category === "ব্যক্তিগত");
@@ -52,7 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
         .map(
           (post) => `
           <div class="post-card">
-            <a href="/post.html?id=${post.id}" class="post-link">
+            <a href="/post?id=${post.id}" class="post-link">
               <div class="card">
                 <img class="card-img" src="${baseURL + post.img1}" alt="${post.title}">
                 
