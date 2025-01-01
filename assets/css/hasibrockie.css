@@ -11404,6 +11404,11 @@ p {
   border-radius: 50%;
 }
 
+.du{
+  border-radius: 0% !important;
+  height: auto;
+}
+
 .testimonial-card-body {
   text-align: left;
   border: 1px solid #dee2e6;
