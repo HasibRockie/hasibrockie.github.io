@@ -2145,6 +2145,15 @@ pre code {
   /* background: rgba(0, 0, 0, 0.5); */
 }
 
+@media screen and (max-width: 768px) {
+  .carousel {
+
+    min-width: 400px;
+    max-width: 800px;
+  }
+  
+}
+
 .carousel-slide {
   position: absolute;
   width: 100%;
