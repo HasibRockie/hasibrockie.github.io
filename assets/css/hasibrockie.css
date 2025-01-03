@@ -2185,6 +2185,84 @@ pre code {
 
 
 
+/* Image Carousel Styling */
+.image-carousel {
+  position: relative;
+  width: 100%;
+  min-height: 500px;
+  /* max-width: auto; */
+  margin: 20px auto;
+  overflow: hidden;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.image-slide {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transform: translateX(100%);
+  transition: opacity 1s ease-in-out, transform 1s ease-in-out;
+  text-align: center;
+  background:white;
+  padding: 20px;
+}
+
+.image-slide img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+}
+
+.image-slide h3 {
+  margin: 10px 0;
+}
+
+.image-slide a {
+  text-decoration: none;
+  color: #00c3ff;
+  font-weight: bold;
+  color: #050506;
+  transition: color 0.3s;
+}
+
+.image-slide a:hover {
+  color: #ff5733;
+}
+
+.image-slide.active {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+
+
+
+@media screen and (max-width: 900px) {
+  .image-carousel {
+    min-height: 350px;
+    margin: 10px auto;
+  }
+
+  .image-slide {
+    padding: 10px;
+  }
+}
+
+
+@media screen and (max-width: 668px) {
+  .image-carousel {
+    min-height: 250px;
+    margin: 10px auto;
+  }
+
+  .image-slide {
+    padding: 10px;
+  }
+}
+
+
 
 @media (max-width: 575.98px) {
   .table-responsive-sm {

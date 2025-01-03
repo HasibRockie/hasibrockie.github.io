@@ -45,3 +45,27 @@ document.addEventListener("DOMContentLoaded", () => {
   // Start the typing animation
   typeText();
 });
+
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  const imageSlides = document.querySelectorAll(".image-slide");
+  let currentImageIndex = 0;
+  const slideInterval = 3000; // Slide change every 3 seconds
+
+  function updateImageCarousel() {
+      imageSlides.forEach((slide, index) => {
+          slide.classList.remove("active");
+          if (index === currentImageIndex) {
+              slide.classList.add("active");
+          }
+      });
+      currentImageIndex = (currentImageIndex + 1) % imageSlides.length;
+  }
+
+  // Initialize the first slide as active
+  updateImageCarousel();
+
+  // Auto-rotate slides every 3 seconds
+  setInterval(updateImageCarousel, slideInterval);
+});
