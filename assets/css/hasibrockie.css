@@ -12292,14 +12292,7 @@ pre .code {
   display: block;
 }
 
-.header .header-content .header-subtitle {
-  /* font-size: calc(10px + (20 - 10) * ((100vw - 350px) / (1400 - 300))); */
-  /* font-size: 18px; */
-  letter-spacing: calc(1px + (5 - 1) * ((100vw - 300px) / (1300 - 300)));
-  opacity: .8;
-  margin-top: -10px;
-  margin-bottom: 20px;
-}
+
 
 .header .header-content .btn {
   position: relative;

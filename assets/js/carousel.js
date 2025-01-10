@@ -69,3 +69,43 @@ document.addEventListener("DOMContentLoaded", () => {
   // Auto-rotate slides every 3 seconds
   setInterval(updateImageCarousel, slideInterval);
 });
+
+
+
+const words = ["Dreamer", "Learner", "Adventurer", "Engineer"];
+        let currentWordIndex = 0;
+        let currentCharIndex = 0;
+        let isDeleting = false;
+        const typingSpeed = 100;
+        const deletingSpeed = 50;
+        const delayBetweenWords = 1500;
+
+        const textElement = document.getElementById("text");
+
+        function typeEffect() {
+            const currentWord = words[currentWordIndex];
+
+            if (isDeleting) {
+                textElement.textContent = currentWord.substring(0, currentCharIndex--);
+                if (currentCharIndex < 0) {
+                    isDeleting = false;
+                    currentWordIndex = (currentWordIndex + 1) % words.length;
+                }
+            } else {
+                textElement.textContent = currentWord.substring(0, currentCharIndex++);
+                if (currentCharIndex > currentWord.length) {
+                    isDeleting = true;
+                    setTimeout(typeEffect, delayBetweenWords);
+                    return;
+                }
+            }
+            setTimeout(typeEffect, isDeleting ? deletingSpeed : typingSpeed);
+        }
+
+        typeEffect();
+
+
+
+        document.addEventListener("DOMContentLoaded", function() {
+          document.querySelector('.quote-container').style.animation = 'fadeInSlideUp 2s ease-out forwards';
+      });
