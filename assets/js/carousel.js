@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.addEventListener("DOMContentLoaded", () => {
   const shortIntroElement = document.querySelector(".short-intro");
-  const fullText = "Mechanical, BUET • IBA-MBA, DU • President's Scout • Ex-Vice-President, BUETJS • Blood Donor";
+  const fullText = "MechE, BUET • IBA-MBA, DU • President's Scout • Ex-Vice-President, BUETJS • Blood Donor";
   let charIndex = 0;
   const typingSpeed = 50; // Typing speed in ms per character
 
@@ -71,41 +71,47 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
+const words = [
+  { text: "A Dreamer", color: "#DA667B" },
+  { text: "A Learner", color: "#169873" },
+  { text: "An Adventurer", color: "#669bbc" },
+  { text: "An Engineer", color: "#A167A5" }
+];
 
-const words = ["Dreamer", "Learner", "Adventurer", "Engineer"];
-        let currentWordIndex = 0;
-        let currentCharIndex = 0;
-        let isDeleting = false;
-        const typingSpeed = 100;
-        const deletingSpeed = 50;
-        const delayBetweenWords = 1500;
+let currentWordIndex = 0;
+let currentCharIndex = 0;
+let isDeleting = false;
+const typingSpeed = 100;
+const deletingSpeed = 50;
+const delayBetweenWords = 1500;
 
-        const textElement = document.getElementById("text");
+const textElement = document.getElementById("text");
 
-        function typeEffect() {
-            const currentWord = words[currentWordIndex];
+function typeEffect() {
+  const currentWordObj = words[currentWordIndex];
+  const currentWord = currentWordObj.text;
+  
+  textElement.style.color = currentWordObj.color;  // Set font color
 
-            if (isDeleting) {
-                textElement.textContent = currentWord.substring(0, currentCharIndex--);
-                if (currentCharIndex < 0) {
-                    isDeleting = false;
-                    currentWordIndex = (currentWordIndex + 1) % words.length;
-                }
-            } else {
-                textElement.textContent = currentWord.substring(0, currentCharIndex++);
-                if (currentCharIndex > currentWord.length) {
-                    isDeleting = true;
-                    setTimeout(typeEffect, delayBetweenWords);
-                    return;
-                }
-            }
-            setTimeout(typeEffect, isDeleting ? deletingSpeed : typingSpeed);
-        }
+  if (isDeleting) {
+      textElement.textContent = currentWord.substring(0, currentCharIndex--);
+      if (currentCharIndex < 0) {
+          isDeleting = false;
+          currentWordIndex = (currentWordIndex + 1) % words.length;
+      }
+  } else {
+      textElement.textContent = currentWord.substring(0, currentCharIndex++);
+      if (currentCharIndex > currentWord.length) {
+          isDeleting = true;
+          setTimeout(typeEffect, delayBetweenWords);
+          return;
+      }
+  }
+  setTimeout(typeEffect, isDeleting ? deletingSpeed : typingSpeed);
+}
 
-        typeEffect();
+typeEffect();
 
-
-
-        document.addEventListener("DOMContentLoaded", function() {
-          document.querySelector('.quote-container').style.animation = 'fadeInSlideUp 2s ease-out forwards';
-      });
+document.addEventListener("DOMContentLoaded", function() {
+  document.querySelector('.quote-container').style.animation = 'fadeInSlideUp 2s ease-out forwards';
+});

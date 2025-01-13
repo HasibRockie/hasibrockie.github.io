@@ -16,7 +16,7 @@
 
 #text {
     font-weight: bold;
-    text-decoration: underline;
+    font-family: 'Courier New', Courier, monospace;
     color:tomato;
 }
 
@@ -24,7 +24,7 @@
     display: inline-block;
     width: 0.1em;
     height: 1em;
-    background-color: tomato;
+    background-color: rgb(66, 66, 66);
     margin-left: 5px;
     animation: blink 0.8s step-end infinite;
 }
