@@ -73,6 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 const words = [
   { text: "A Dreamer", color: "#DA667B" },
+  { text: "A Believer", color: "#00007B" },
   { text: "A Learner", color: "#169873" },
   { text: "An Adventurer", color: "#669bbc" },
   { text: "An Engineer", color: "#A167A5" }
