@@ -29,7 +29,7 @@
   --breakpoint-lg: 992px;
   --breakpoint-xl: 1200px;
   --font-family-sans-serif: "Open Sans", sans-serif;
-  --font-family-monospace: roboto, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  --font-family-monospace: "Orbitron", roboto, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
 *,
@@ -51,7 +51,7 @@ article, aside, figcaption, figure, footer, header, hgroup, main, nav, section {
 
 body {
   margin: 0;
-  font-family: roboto, "Open Sans", sans-serif;
+  font-family: "Orbitron", "Anek Bangla", roboto, "Open Sans", sans-serif;
   font-size: 1rem;
   font-weight: 400 !important;
   line-height: 1.5;
@@ -65,11 +65,21 @@ li{
 }
 
 .pricing-card-list > p{
-  font-weight: 600 !important;
+  font-weight: 400 !important;
 }
 
 .just {
   text-align: justify;
+  font-family:  roboto, "Anek Bangla";
+  font-weight: 400;
+}
+
+p{
+  font-family: "Fjalla One", "Anek Bangla", "Baloo Paaji", roboto;
+}
+
+button{
+  font-family: "Fjalla One", "Anek Bangla", "Baloo Paaji", roboto;
 }
 
 [tabindex="-1"]:focus {
@@ -90,7 +100,6 @@ h1, h2, h3, h4, h5, h6 {
 p {
   margin-top: 0;
   margin-bottom: 1rem;
-  font-weight: 300 !important;
 }
 
 abbr[title],
@@ -125,7 +134,7 @@ ul ol {
 }
 
 dt {
-  font-weight: 700;
+  font-weight: 400;
 }
 
 dd {
@@ -209,7 +218,7 @@ pre,
 code,
 kbd,
 samp {
-  font-family: roboto, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-family:"Baloo Paaji", roboto, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   font-size: 1em;
 }
 
@@ -261,6 +270,12 @@ button {
 button:focus {
   outline: 1px dotted;
   outline: 5px auto -webkit-focus-ring-color;
+}
+
+.quote-line{
+  font-family: "Orbitron", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-weight: 600;
+  color: tomato;
 }
 
 input,
@@ -2125,9 +2140,13 @@ pre code {
 
 .short-intro{
   letter-spacing: 1px;
-  color: black;
-  font-weight: 400;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  color: tomato;
+  font-weight: 600;
+  font-family:"Anek Bangla", "Baloo Paaji", roboto;
+}
+
+li{
+  font-family: "Fjalla One", "Anek Bangla", "Baloo Paaji", roboto !important;
 }
 
 
@@ -2905,6 +2924,7 @@ textarea.form-control {
   border-radius: 0.1rem;
   -webkit-transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  font-family: "Fjalla One", "Anek Bangla", "Baloo Paaji", roboto !important;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -6718,7 +6738,7 @@ a.close.disabled {
   z-index: 1070;
   display: block;
   margin: 0;
-  font-family: roboto, "Open Sans", sans-serif;
+  font-family:"Baloo Paaji", roboto, "Open Sans", sans-serif;
   font-style: normal;
   font-weight: 400;
   line-height: 1.5;
@@ -6831,7 +6851,7 @@ a.close.disabled {
   z-index: 1060;
   display: block;
   max-width: 276px;
-  font-family: roboto, "Open Sans", sans-serif;
+  font-family:"Baloo Paaji", roboto, "Open Sans", sans-serif;
   font-style: normal;
   font-weight: 400;
   line-height: 1.5;
@@ -10817,7 +10837,7 @@ button.bg-dark:focus {
 }
 
 .text-monospace {
-  font-family: roboto, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
+  font-family: "Baloo Paaji",roboto, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
 }
 
 .text-justify {
@@ -11237,12 +11257,12 @@ a.text-dark:hover, a.text-dark:focus {
 
 h1, h2, h3, h4, h5, h6 {
   font-weight: 500;
-  font-family: 'Baloo Paaji', cursive;
+  font-family: "Orbitron","Anek bangla", 'Baloo Paaji', cursive;
   color: #695aa6;
 }
 
 .my-font {
-  font-family: 'Baloo Paaji', cursive;
+  font-family: "Orbitron", 'Baloo Paaji', "Anek Bangla", cursive;
 }
 
 p {
@@ -11300,6 +11320,7 @@ p {
   border: 1px solid #dee2e6;
   overflow: hidden;
   border-radius: 3px;
+  background-color: white;
 }
 
 .service-card .body {
@@ -11543,6 +11564,7 @@ p {
   width: 90px;
   height: 90px;
   border-radius: 50%;
+  border: 1px solid gray;
 }
 
 .du{
@@ -11574,6 +11596,7 @@ p {
   margin-bottom: 30px;
   border-radius: 0;
   overflow: hidden;
+  background-color: white;
 }
 
 .blog-card-header {
@@ -11609,9 +11632,9 @@ p {
   padding: 30px 20px 30px 30px;
 }
 
-.blog-card-title {
+/* .blog-card-title {
   font-weight: 100;
-}
+} */
 
 .blog-card-caption {
   margin: 15px 0 15px !important;
@@ -11816,7 +11839,7 @@ pre .code {
           align-items: center;
   -webkit-transition: all, 0.3s;
   transition: all, 0.3s;
-  font-family: 'Baloo Paaji', cursive;
+  font-family: "Orbitron",'Baloo Paaji', cursive;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -12191,6 +12214,7 @@ pre .code {
   padding: 4px 0;
   display: inline-block;
   margin: 0;
+  font-family: "Orbitron", "Anek Bangla", roboto !important; 
 }
 
 .footer .brand {
@@ -12361,12 +12385,12 @@ pre .code {
           align-items: flex-start;
   text-align: justify;
   /* font-family:'Times New Roman', Times, serif!important; */
-  font-family:roboto, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif !important;
+  font-family:"Orbitron","Baloo Paaji", roboto, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif !important;
   font-weight: bold !important;
 }
 
 .cormorant-garamond-semibold {
-  font-family: "Cormorant Garamond", serif;
+  font-family: "Orbitron","Cormorant Garamond", serif;
   font-weight: 600;
   font-style: normal;
 }
