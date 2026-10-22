@@ -10,7 +10,7 @@
   const NAV = [["home", "Home", "index.html"], ["about", "About", "about.html"], ["journey", "Journey", "journey.html"], ["skills", "Skills", "skills.html"], ["projects", "Projects", "projects.html"], ["achievements", "Achievements", "achievements.html"], ["writing", "Writing", "blogs/"], ["memories", "Memories", "memories/"], ["gallery", "Gallery", "gallery.html"]];
   const CAT = { "ফিকশন": "Fiction", "ব্যক্তিগত": "Personal", "ধর্মীয়": "Faith", "ব্লগ": "Blog", "অন্যান্য": "Other" };
   const fmt = d => new Date(d + "T00:00:00").toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
-  const MOMENTS_ACCESS_CODE = "4367";
+  const MOMENTS_ACCESS_CODE = "4366";
 
   async function load(file) {
     try { const r = await fetch(R + file); if (!r.ok) throw new Error(r.status); return await r.json(); }
