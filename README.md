@@ -16,8 +16,8 @@ Live site: https://hasibrockie.github.io/
 | Achievements | `achievements.html` | `data.json` > `achievements` |
 | Gallery | `gallery.html` | `data.json` > `hobbies`, `photos` |
 | Writing | `blogs/index.html` | `posts.json` |
-| Post | `post/index.html` (`?id=N`) | `posts.json` |
-| Memories | `memories/index.html` | `posts.json`, personal category |
+| Post | `post/index.html` (`?id=N`) |  |
+| Memories | `memories/index.html` | personal category |
 | Not found | `404.html` | static |
 
 Each HTML file is a small shell. `assets/js/site.js` adds the header and footer and renders the page from JSON, chosen by `<body data-page="...">`. `data-root` is `""` for top-level pages and `"../"` for nested ones, so every path stays relative.
