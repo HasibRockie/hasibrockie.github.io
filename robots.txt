@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://hasibrockie.github.io/sitemap.xml
