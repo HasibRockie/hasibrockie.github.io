@@ -18,7 +18,6 @@ Live site: https://hasibrockie.github.io/
 | Writing | `blogs/index.html` | `posts.json` |
 | Post | `post/index.html` (`?id=N`) | `posts.json` |
 | Memories | `memories/index.html` | `posts.json`, personal category |
-| Moments | `moments/index.html` | `moments.json` |
 | Not found | `404.html` | static |
 
 Each HTML file is a small shell. `assets/js/site.js` adds the header and footer and renders the page from JSON, chosen by `<body data-page="...">`. `data-root` is `""` for top-level pages and `"../"` for nested ones, so every path stays relative.
@@ -84,5 +83,4 @@ grep -rl hasibrockie . | xargs sed -i 's#hasibrockie#NEWNAME#g'
 
 - Posts 16, 22 and 30 are missing from `posts.json`, so they are not in the sitemap.
 - The Memories page lists personal-category posts by year.
-- The Moments page is not linked from the public navigation or sitemap and asks for a passcode. This is only a casual client-side gate: the page, code, and moment data in a public GitHub Pages deployment remain publicly accessible. `noindex` is a crawler hint, not privacy or protection. Do not use this for confidential content; genuine access control requires authenticated hosting or a server-side service.
 - Images that fail to load hide themselves rather than showing broken icons.
