@@ -1,11 +1,16 @@
 (() => {
   const B = document.body, R = B.dataset.root || "", P = B.dataset.page, main = document.getElementById("main");
   const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-  const im = (src, alt, w, h) => src ? `<img src="${R}${esc(src)}" alt="${esc(alt)}" loading="lazy" decoding="async"${w ? ` width="${w}" height="${h}"` : ""} onerror="this.remove()">` : "";
+  const imageURL = src => /^https:\/\//i.test(src) ? src : /^(?:[a-z][a-z0-9+.-]*:|\/\/)/i.test(src) ? "" : R + src;
+  const im = (src, alt, w, h) => {
+    const url = src ? imageURL(src) : "";
+    return url ? `<img src="${esc(url)}" alt="${esc(alt)}" loading="lazy" decoding="async"${w ? ` width="${w}" height="${h}"` : ""} onerror="this.remove()">` : "";
+  };
   const link = l => `<a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)}</a>`;
   const NAV = [["home", "Home", "index.html"], ["about", "About", "about.html"], ["journey", "Journey", "journey.html"], ["skills", "Skills", "skills.html"], ["projects", "Projects", "projects.html"], ["achievements", "Achievements", "achievements.html"], ["writing", "Writing", "blogs/"], ["memories", "Memories", "memories/"], ["gallery", "Gallery", "gallery.html"]];
   const CAT = { "ফিকশন": "Fiction", "ব্যক্তিগত": "Personal", "ধর্মীয়": "Faith", "ব্লগ": "Blog", "অন্যান্য": "Other" };
   const fmt = d => new Date(d + "T00:00:00").toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+  const MOMENTS_ACCESS_CODE = "4367";
 
   async function load(file) {
     try { const r = await fetch(R + file); if (!r.ok) throw new Error(r.status); return await r.json(); }
@@ -96,6 +101,35 @@
       const ps = (await posts()).filter(p => p.category === "ব্যক্তিগত"), by = {};
       ps.forEach(p => (by[p.date.slice(0, 4)] ||= []).push(p));
       main.innerHTML = head("Memories", "Personal posts, newest year first: school, college, BUET and the stretches between.") + wrap(Object.keys(by).sort().reverse().map(y => `<h2 class="year">${y}</h2><ul class="plist">${rows(by[y])}</ul>`).join(""));
+    },
+    moments() {
+      main.innerHTML = `<section class="wrap moments-shell">
+<div class="pagehead moments-head"><p class="moments-kicker">A LITTLE PRIVATE CORNER</p><h1>Moments</h1><p>Little pieces of time, kept in one place.</p></div>
+<section class="moments-gate" aria-labelledby="moments-gate-title"><div class="moments-seal" aria-hidden="true">M</div><h2 id="moments-gate-title">For invited eyes</h2>
+<p>Enter the passcode to open this collection.</p>
+<form id="moments-unlock" class="moments-form"><label for="moments-code">Passcode</label><div class="moments-form-row"><input id="moments-code" name="passcode" type="password" autocomplete="current-password" required><button class="btn" type="submit">Open moments</button></div><p id="moments-message" class="moments-message" role="status" aria-live="polite"></p></form>
+</section></section>`;
+      const form = document.getElementById("moments-unlock"), input = document.getElementById("moments-code"), message = document.getElementById("moments-message");
+      input.addEventListener("input", () => {
+        input.removeAttribute("aria-invalid");
+        message.textContent = "";
+      });
+      form.addEventListener("submit", async event => {
+        event.preventDefault();
+        if (input.value !== MOMENTS_ACCESS_CODE) {
+          input.setAttribute("aria-invalid", "true");
+          message.textContent = "That passcode doesn’t match. Please try again.";
+          input.focus();
+          return;
+        }
+        const collection = await load("moments.json");
+        const sorted = collection.slice().sort((a, b) => String(b.date).localeCompare(String(a.date)));
+        const entries = sorted.map(moment => `<li class="moment-item"><article class="moment-card">
+<div class="moment-photo">${im(moment.image, moment.caption || `Moment from ${moment.place}`)}</div><div class="moment-copy"><p class="moment-meta"><time datetime="${esc(moment.date)}">${fmt(moment.date)}</time><span aria-hidden="true"> | </span><span>${esc(moment.place)}</span></p>${moment.caption?.trim() ? `<p class="moment-caption">${esc(moment.caption)}</p>` : ""}</div>
+</article></li>`).join("");
+        main.innerHTML = `<section class="wrap moments-shell"><div class="pagehead moments-head"><p class="moments-kicker">A LITTLE PRIVATE CORNER</p><h1>Moments</h1><p>Little pieces of time, kept in one place.</p></div>
+<section class="moments-timeline" aria-label="Moments, newest first">${entries ? `<ol class="moment-list">${entries}</ol>` : `<div class="moments-empty"><span class="moments-empty-mark" aria-hidden="true">✳</span><h2>Your story starts here</h2><p>Add your first photograph, date, place and caption to <code>moments.json</code>.</p></div>`}</section></section>`;
+      });
     }
   };
 
