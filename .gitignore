@@ -1,3 +1,6 @@
 /moments/
 /moments.json/
 /assets/js/
+
+# all json 
+*.json
