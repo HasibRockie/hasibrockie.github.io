@@ -1,4 +1,0 @@
-User-agent: *
-Disallow:
-
-Sitemap: https://hasibrockie.github.io/sitemap.xml
