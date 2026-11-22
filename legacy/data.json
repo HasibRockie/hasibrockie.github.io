@@ -1,0 +1,111 @@
+{
+  "site": {
+    "name": "Md Hasibul Islam",
+    "tagline": "Dreamer | Learner | Believer | Engineer",
+    "quote": "But I have promises to keep, and miles to go before I sleep.",
+    "email": "Hasiee8004@gmail.com",
+    "resume": "https://drive.google.com/file/d/10qcQ9t6i6HuDkok53S7IoJO_uZpmjUEj/view",
+    "social": [
+      {"label": "LinkedIn", "url": "https://www.linkedin.com/in/hasib009/"},
+      {"label": "Google Scholar", "url": "https://scholar.google.com/citations?user=5L1sEAsAAAAJ&hl=en"},
+      {"label": "ResearchGate", "url": "https://www.researchgate.net/profile/Md_Islam1301"},
+      {"label": "GitHub", "url": "https://github.com/hasibRockie/"},
+      {"label": "CodePen", "url": "https://codepen.io/hasib_rockie/"},
+      {"label": "X", "url": "https://x.com/HasibMania"},
+      {"label": "YouTube", "url": "https://www.youtube.com/@buetshortmemories"}
+    ]
+  },
+  "titleblock": [
+    ["Name", "Md Hasibul Islam"],
+    ["Degree", "B.Sc. Mechanical Engineering, BUET (2019-2024)"],
+    ["Studying", "MBA, IBA, University of Dhaka (2025-now)"],
+    ["Working", "Field Officer, BSTI (since Aug 2025)"],
+    ["Career", "BCS Administration (recommended), 47th BCS"],
+    ["Research", "Heliyon paper on MHD free convection (2024)"]
+  ],
+  "explore": [
+    ["About", "about.html", "Who I am and how to reach me."],
+    ["Journey", "journey.html", "Education, training and work in order."],
+    ["Skills", "skills.html", "Languages, software and other abilities."],
+    ["Projects", "projects.html", "Research, coursework and web builds."],
+    ["Achievements", "achievements.html", "Awards, leadership and training."],
+    ["Writing", "blogs/", "Fiction, essays and reflections, mostly in Bangla."],
+    ["Memories", "memories/", "Personal posts in time order."],
+    ["Gallery", "gallery.html", "Hobbies and photographs."]
+  ],
+  "about": {
+    "photo": "assets/imgs/hasib1.jpeg",
+    "intro": "A mechanical engineering graduate from BUET whose interest in computer science grew into a second discipline.",
+    "paragraphs": [
+      "I graduated in Mechanical Engineering from the Bangladesh University of Engineering and Technology (BUET). I am now pursuing an MBA at the Institute of Business Administration (IBA), University of Dhaka.",
+      "In engineering I have hands-on experience designing an unmanned aerial vehicle and an air cooler built on Peltier plates, and I am interested in research in fluid and thermal engineering.",
+      "Outside mechanics I work with programming, web development, ethical hacking and cybersecurity, and machine learning, and I like the places where physical and digital systems meet.",
+      "I am an active member of scouting and the BUET Journalists Society, donate blood regularly, and train in martial arts. I keep learning, whether that is a new machine learning method or a new language."
+    ],
+    "facts": [
+      ["Birthday", "29 June"],
+      ["Blood group", "O positive"],
+      ["Home", "Lakshmipur, Chittagong, Bangladesh"],
+      ["Interests", "Machine learning, AI, quantum mechanics, web development, martial arts"]
+    ]
+  },
+  "timeline": [
+    {"period": "2010 to 2016", "title": "Secondary school (SSC)", "org": "Lakshmipur Adarsha Samad Govt. High School, Lakshmipur", "text": "Passed in 2016, with GPA-5 (A+) from Cumilla Board", "img": "assets/imgs/samad.png"},
+    {"period": "2016 to 2018", "title": "Higher secondary (HSC)", "org": "Birshrestha Munshi Abdur Rouf Public College, Peelkhana, Dhaka", "text": "Passed in 2018, with GPA-5 (A+) from Dhaka Board", "img": "assets/imgs/bmarpc.jpg"},
+    {"period": "2019 to 2024", "title": "B.Sc. in Mechanical Engineering", "org": "Bangladesh University of Engineering and Technology (BUET), Dhaka", "points": ["Session 2018-19"], "img": "assets/imgs/buet.png"},
+    {"period": "Nov 2023", "title": "Industrial training", "org": "RahimAfrooz Batteries Limited, Zirani Bazar, Savar", "text": "Worked with the maintenance team at a leading manufacturer of automotive and industrial batteries in Bangladesh.", "img": "assets/imgs/rahimafrooz.jpg"},
+    {"period": "2025 to now", "title": "Master of Business Administration", "org": "Institute of Business Administration (IBA), University of Dhaka", "points": ["Intake 67"], "img": "assets/imgs/du.png"},
+    {"period": "17 Aug 2025 to now", "title": "Field Officer (9th Grade), C.M. Wing", "org": "Bangladesh Standards and Testing Institution (BSTI)", "text": "BSTI is the national standards body under the Ministry of Industries. It formulates and implements product and service standards, and handles testing, certification and compliance on weights and measures.", "link": {"label": "bsti.gov.bd", "url": "https://bsti.gov.bd"}, "img": "assets/imgs/bsti.jpg"},
+    {"period": "47th BCS", "title": "Assistant Commissioner (recommended), BCS Administration", "org": "Bangladesh Civil Service", "text": "Recommended as Assistant Commissioner, BCS Administration (47th BCS), on the first attempt.", "img": "assets/imgs/bcs.webp"}
+  ],
+  "skills": [
+    {"group": "Languages", "items": ["HTML", "CSS", "C", "C++", "Python", "JavaScript", "MySQL", "MongoDB", "LaTeX"]},
+    {"group": "Software and frameworks", "items": ["MATLAB", "SolidWorks", "COMSOL", "Arduino", "Git and GitHub", "Linux", "Django", "ReactJS"]},
+    {"group": "Other", "items": ["Judo", "Karate", "Scouting", "Blood donation", "Ethical hacking", "Data science", "Machine learning"]}
+  ],
+  "interests": "Machine learning, AI, quantum mechanics, web development and martial arts.",
+  "projects": [
+    {"title": "2D Visualization of Incompressible Flow Through Machine Learning", "meta": "Thesis, 2024", "img": "assets/imgs/thesis.png", "text": "Combines machine learning with traditional computational fluid dynamics to predict fluid flow in mechanical systems. It explores hybrid approaches that reduce computational cost and benchmarks them against conventional methods.", "people": [["Thesis partner", "Waqar Habib Noman (ME, BUET)"], ["Supervisor", "Dr. Mohammad Mamun, Professor, Dept. of Mechanical Engineering, BUET"]], "links": [{"label": "Presentation", "url": "https://docs.google.com/presentation/d/1LnT7AgzHQjLQQ3WkvFlMv9DivzCXVtuy/edit?usp=drive_link"}, {"label": "Dissertation", "url": "https://drive.google.com/file/d/1qlQhNqVeuoOJddJkJk48yo9joMh7c4ba/view?usp=drive_link"}]},
+    {"title": "MHD Free Convection with Joule Heating and Entropy Generation inside an H-shaped Chamber", "meta": "Journal paper, Heliyon, 2023 work", "img": "assets/imgs/nc_h_shape.jpeg", "text": "Numerical study of natural convection of water in an H-shaped chamber under a magnetic field and Joule heating, varying Rayleigh and Hartmann numbers. Heat transfer is assessed through Nusselt numbers, temperature, entropy generation and thermal criteria, with streamlines and isotherms showing the flow.", "people": [["Research partners", "Riyan Hashem Jamy, Md Shahneoug Shuvo (ME, BUET)"], ["Supervisor", "Dr. Sumon Saha, Professor, Dept. of Mechanical Engineering, BUET"]], "links": [{"label": "Read the paper", "url": "https://www.cell.com/heliyon/fulltext/S2405-8440(24)05411-2"}]},
+    {"title": "Air Conditioner Using Peltier Module", "meta": "Project, 2023", "img": "assets/imgs/AIRCOOLER.jpg", "text": "An air conditioner built on a thermoelectric (Peltier) module and locally available parts. Covers module, fin, fan motor and pump selection, circuit design, SolidWorks modelling and an economic analysis for manufacturing.", "people": [["Partners", "Shorup Chanda, Riyan Hashem Jamy (ME, BUET)"]], "links": [{"label": "ResearchGate", "url": "https://www.researchgate.net/publication/370659755_Air_Conditioner_Using_Peltier_Module"}]},
+    {"title": "Cooling Load Estimation", "meta": "Project, 2023", "img": "assets/imgs/cooling_load.png", "text": "Models a room in SolidWorks and estimates its cooling load from climate data, covering conduction, solar radiation, infiltration and internal gains. Ends with the refrigeration tonnage needed, documented in a LaTeX report.", "links": [{"label": "SolidWorks, TeX and PDF on GitHub", "url": "https://github.com/HasibRockie/cooling-load-estimation"}]},
+    {"title": "Unmanned Aerial Vehicle (UAV)", "meta": "Project, 2022", "img": "assets/imgs/UAV.png", "text": "A GPS-guided UAV designed for automated package delivery to fixed locations, aimed at fast, low-cost delivery to remote or hard-to-reach places.", "people": [["Partners", "Sajib Ali, Parvez Hossen, Sanowar Hossain (ME, BUET)"]], "links": [{"label": "Documentation", "url": "https://drive.google.com/file/d/1twOQuwUkg90QQlsU4NCkJ06VstMUqEDs/view?usp=sharing"}]}
+  ],
+  "other_projects": [
+    {"title": "BUETJS: BUET Journalists Society", "meta": "Web project", "img": "assets/imgs/projects/buet.png", "text": "Official website of the BUET Journalists Society, carrying campus news.", "tools": ["Django", "Bootstrap"], "links": [{"label": "buetjs.com", "url": "https://buetjs.com/"}, {"label": "Source", "url": "https://github.com/HasibRockie/buetjs"}]},
+    {"title": "Neutrino", "meta": "Web project", "img": "assets/imgs/projects/neutrino.webp", "text": "A sample hospital management system.", "tools": ["Django", "Bootstrap"], "links": [{"label": "Live site", "url": "https://hasibmania.pythonanywhere.com/"}, {"label": "Source", "url": "https://github.com/HasibRockie/neutrino-hospital-management-django"}]},
+    {"title": "Handnote on Cyber Security", "meta": "Ethical hacking project", "img": "assets/imgs/projects/hacking.png", "text": "A single organised document covering ethical hacking and cybersecurity from beginner to advanced topics.", "tools": ["Java", "Linux", "Burp Suite", "Acunetix"], "links": [{"label": "Read the document", "url": "https://drive.google.com/file/d/1D0myUpF1mCozKjNXN7R4p3TD0CFUSg6n/view"}]},
+    {"title": "HousePlant", "meta": "Web project", "img": "assets/imgs/projects/houseplant.webp", "text": "A sample online plant shop and house decoration site.", "tools": ["React JS", "MongoDB", "Bootstrap"], "links": [{"label": "Live site", "url": "https://house-plant-world.web.app/"}, {"label": "Source", "url": "https://github.com/HasibRockie/house-plant-world-client-side"}]},
+    {"title": "HasibMania", "meta": "Web project", "img": "assets/imgs/projects/hasibmania.png", "text": "A personal blog for life writing, fiction, blogs and educational posts.", "tools": ["React JS", "Django REST API", "Bootstrap"], "links": [{"label": "Live site", "url": "https://hasibmania.web.app/"}, {"label": "Source", "url": "https://github.com/HasibRockie/HasibMania-React"}]}
+  ],
+  "achievements": [
+    {"title": "President's Scout Award", "text": "Awarded by the President of Bangladesh, Abdul Hamid, in 2017.", "img": "assets/imgs/ps.jpg"},
+    {"title": "Vice President, BUET Journalists Society", "text": "Served in 2023-24.", "img": "assets/imgs/bjs.jpg"},
+    {"title": "Lifelong blood donor", "text": "Donated 16 times, up to October 2026.", "img": "assets/imgs/blood.jpg"},
+    {"title": "Responsive web design", "text": "Full-stack web development with MERN, Django and WordPress (freeCodeCamp certificate).", "img": "assets/imgs/freecodecamp.jpeg"},
+    {"title": "Martial arts", "text": "Blue belt in both Judo and Karate.", "img": "assets/imgs/judo.jpg"},
+    {"title": "Ethical hacking", "text": "Completed an ethical hacking and cyber security course.", "img": "assets/imgs/aws.jpeg"}
+  ],
+  "hobbies": [
+    {"title": "Self-improvement tasks"}, {"title": "Designing and writing"}, {"title": "Exploring world history"},
+    {"title": "Collecting foreign currency"}, {"title": "Photography and videography"}, {"title": "Martial arts"},
+    {"title": "Travelling and hiking"}, {"title": "Advanced science"}, {"title": "Exploring new tools, frameworks and technologies"}
+  ],
+  "photos": [
+    {"img": "assets/imgs/gallery/01.webp", "caption": "Last day of a workshop"},
+    {"img": "assets/imgs/gallery/02.webp", "caption": "Presentation of Electro-Mechanical System Design"},
+    {"img": "assets/imgs/gallery/03.webp", "caption": "Get-together of Scout group Finge"},
+    {"img": "assets/imgs/gallery/04.webp", "caption": "President's Scout award ceremony"},
+    {"img": "assets/imgs/gallery/05.webp", "caption": "Bronze prize at an inter-club Judo competition"},
+    {"img": "assets/imgs/gallery/06.webp", "caption": "Mecha Fest Rally 2023"},
+    {"img": "assets/imgs/gallery/ICT.jpeg", "caption": "ICT seminar at Lakshmipur"},
+    {"img": "assets/imgs/gallery/08.webp", "caption": "Rag flash mob by Interval-18, BUET"},
+    {"img": "assets/imgs/gallery/09.webp", "caption": "Receiving a certificate from the VC of BUET"},
+    {"img": "assets/imgs/gallery/10.webp", "caption": "Fresher's reception by BUET Journalists Society"},
+    {"img": "assets/imgs/gallery/11.webp", "caption": "Farewell 2024, Mechanical Engineering Department"},
+    {"img": "assets/imgs/gallery/12.webp", "caption": "Career talk Q&A session"},
+    {"img": "assets/imgs/gallery/13.webp", "caption": "Mechanical Cultural Night 2024"},
+    {"img": "assets/imgs/gallery/14.webp", "caption": "Industrial day tour at Titas"},
+    {"img": "assets/imgs/gallery/15.webp", "caption": "Presentation day, thermo-electric system design"}
+  ]
+}
