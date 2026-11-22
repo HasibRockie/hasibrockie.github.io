@@ -1,0 +1,29 @@
+name: Content snapshot
+
+on:
+  schedule:
+    - cron: "17 21 * * *"        # every day 21:17 UTC (03:17 in Bangladesh). Runs only from the default branch.
+  workflow_dispatch:              # "Run workflow" button for an on-demand refresh
+
+permissions:
+  contents: write                 # the only permission needed: commit the snapshot files
+
+concurrency:
+  group: snapshot
+  cancel-in-progress: false
+
+jobs:
+  snapshot:
+    if: github.repository == 'HasibRockie/hasibrockie.github.io'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd   # v6.0.2 (pinned to a commit)
+      - name: Build snapshot from the public API
+        env:
+          SUPABASE_URL: ${{ vars.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ vars.SUPABASE_ANON_KEY }}
+          SITE_URL: ${{ vars.SITE_URL }}
+        run: python3 scripts/snapshot.py
+      - name: Commit only if something changed
+        run: sh scripts/snapshot-commit.sh
