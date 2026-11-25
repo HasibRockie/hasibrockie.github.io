@@ -1,0 +1,97 @@
+{
+  "nav": [
+    {
+      "href": "index.html",
+      "label": "Home",
+      "visible": true
+    },
+    {
+      "href": "about.html",
+      "label": "About",
+      "visible": true
+    },
+    {
+      "href": "journey.html",
+      "label": "Journey",
+      "visible": true
+    },
+    {
+      "href": "skills.html",
+      "label": "Skills",
+      "visible": true
+    },
+    {
+      "href": "projects.html",
+      "label": "Projects",
+      "visible": true
+    },
+    {
+      "href": "achievements.html",
+      "label": "Achievements",
+      "visible": true
+    },
+    {
+      "href": "blogs/",
+      "label": "Writing",
+      "visible": true
+    },
+    {
+      "href": "memories/",
+      "label": "Memories",
+      "visible": true
+    },
+    {
+      "href": "gallery.html",
+      "label": "Gallery",
+      "visible": true
+    }
+  ],
+  "seo": {
+    "ogImage": "https://dfrlugnqaekgerfhtjra.supabase.co/storage/v1/object/public/site-media/seo/2026/44dd5587-78c3-4e95-a4f0-cd132cb79431.webp",
+    "description": ""
+  },
+  "card": "raised",
+  "hero": "centered",
+  "mode": "dark",
+  "width": 1200,
+  "accent": "#ed7750",
+  "bnFont": "Noto Serif Bengali",
+  "preset": "midnight",
+  "social": [
+    {
+      "url": "https://www.linkedin.com/in/hasib009/",
+      "label": "LinkedIn"
+    },
+    {
+      "url": "https://scholar.google.com/citations?user=5L1sEAsAAAAJ&hl=en",
+      "label": "Google Scholar"
+    },
+    {
+      "url": "https://www.researchgate.net/profile/Md_Islam1301",
+      "label": "ResearchGate"
+    },
+    {
+      "url": "https://github.com/hasibRockie/",
+      "label": "GitHub"
+    }
+  ],
+  "density": "comfortable",
+  "favicon": "",
+  "tagline": "But, I've promises to keep, And miles to go before I sleep.",
+  "bodyFont": "Bricolage Grotesque",
+  "sections": [
+    {
+      "key": "explore",
+      "visible": true
+    },
+    {
+      "key": "latest",
+      "visible": true
+    }
+  ],
+  "fontScale": 0.9,
+  "siteTitle": "HasibMania",
+  "animations": true,
+  "footerText": "hasibrockie.github.io",
+  "headingFont": "Newsreader"
+}
