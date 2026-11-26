@@ -83,7 +83,7 @@ rd = lambda p: json.loads(p.read_text(encoding="utf-8"))
 
 # ---------- 1. round trip from an empty folder
 print("snapshot.py")
-tmp = Path(tempfile.mkdtemp()); out = tmp / "a"; out.mkdir(); (out / "post").mkdir(); shutil.copy(ROOT / "post/index.html", out / "post/index.html")
+tmp = Path(tempfile.mkdtemp()); out = tmp / "a"; out.mkdir(); (out / "post").mkdir(); shutil.copy(ROOT / "post/index.html", out / "post/index.html"); shutil.copy(ROOT / "about.html", out / "about.html"); (out / "blogs").mkdir(); shutil.copy(ROOT / "blogs/index.html", out / "blogs/index.html")
 r = snap(out); ok(r.returncode == 0, "run succeeds: " + r.stderr[-200:])
 d, p = rd(out / "data.json"), rd(out / "posts.json")
 ok(d == DATA, "data.json identical to the original legacy file" + ("" if d == DATA else " (keys differing: %s)" % [k for k in DATA if d.get(k) != DATA.get(k)]))
@@ -101,6 +101,10 @@ ok(rd(out / "site-settings.json") == {"preset": "paper"}, "site-settings.json")
 ok(not (out / "moments.json").exists(), "moments are never exported")
 sm = (out / "sitemap.xml").read_text(encoding="utf-8"); locs = re.findall(r"<loc>([^<]*)</loc>", sm)
 ok(len(locs) == 10 + len(POSTS) + 1 and "https://hasibrockie.github.io/post/44/" in locs and "https://hasibrockie.github.io/moments/" in locs and not any("id=45" in l or "id=46" in l for l in locs), "sitemap: 10 pages (incl. public moments) + all published posts, no drafts")
+ab = (out / "about.html").read_text(encoding="utf-8"); wr = (out / "blogs/index.html").read_text(encoding="utf-8")
+ok("<title>About Md Hasibul Islam" in ab and 'id="ld-page"' in ab and '"BreadcrumbList"' in ab and ab.count('id="ld-page"') == 1, "page SEO: title, one JSON-LD block, breadcrumb")
+ok('class="wrap seo-static"' in ab and "<h1>About Md Hasibul Islam</h1>" in ab, "page SEO: crawlable text in <main>")
+ok('href="../post/44/"' in wr and "id=45" not in wr, "writing page links every published post statically")
 pg = out / "post" / "44" / "index.html"
 ok(pg.exists() and not (out / "post" / "45").exists(), "static page for each published post only")
 if pg.exists():

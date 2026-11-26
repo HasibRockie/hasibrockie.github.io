@@ -1,5 +1,5 @@
 // render.js - header/footer and every page. All dynamic text goes through esc(); Markdown goes through the sanitiser in md.js.
-import { renderMd } from "./md.js?v=202611270222";
+import { renderMd } from "./md.js?v=202611270253";
 const B = document.body, R = B.dataset.root || "", P = B.dataset.page;
 export const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 export const imageURL = (src) => (/^https:\/\//i.test(src) ? src : /^(?:[a-z][a-z0-9+.-]*:|\/\/)/i.test(src) ? "" : R + src);

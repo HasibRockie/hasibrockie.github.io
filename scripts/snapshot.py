@@ -108,6 +108,9 @@ def main():
     # ---- static post pages: post/<id>/index.html with real title, description, cover and text, so search engines and
     # link previews (Facebook, LinkedIn, WhatsApp) see the story without running JavaScript. The page script takes over for people.
     changed += write_post_pages(posts, settings)
+    # ---- per-page SEO: title, description, social tags, JSON-LD and a plain-HTML version of each page's content, written
+    # into the page itself. People get the full JavaScript page; search engines get real text without running scripts.
+    changed += write_page_seo(data, posts, settings)
 
     # ---- sitemap (deterministic: lastmod comes from the content, so an unchanged site produces no diff)
     day = lambda rows: max((str(r.get("updated_at") or r.get("created_at") or "")[:10] for r in rows), default="") or datetime.date.today().isoformat()
@@ -176,6 +179,114 @@ def write_post_pages(posts, settings):
         if d.is_dir() and d.name.isdigit() and d.name not in keep:
             for x in d.iterdir(): x.unlink()
             d.rmdir(); out.append(f"post/{d.name}/ (removed)")
+    return out
+
+# Default search titles/descriptions. Site settings > SEO > "Page titles & descriptions" overrides any of them.
+DEFAULT_SEO = {
+  "home": ("Md Hasibul Islam (Hasib) | Engineer, Researcher & Writer",
+           "Md Hasibul Islam (Hasib): BUET mechanical engineer, 47th BCS (Administration), researcher in fluid and thermal engineering, web developer and Bangla writer."),
+  "about": ("About Md Hasibul Islam | BUET Mechanical Engineer, 47th BCS",
+            "Who Md Hasibul Islam (Hasib) is: a BUET mechanical engineer recommended for the BCS Administration cadre, studying an MBA at IBA, and writing Bangla fiction."),
+  "journey": ("Education & Career | Md Hasibul Islam: BUET, IBA, BSTI, BCS",
+              "The journey of Md Hasibul Islam: schools in Lakshmipur, HSC in Dhaka, B.Sc. in Mechanical Engineering at BUET, MBA at IBA (DU), BSTI and the 47th BCS."),
+  "skills": ("Skills | Md Hasibul Islam: MATLAB, SolidWorks, COMSOL, Python",
+             "Engineering and programming skills of Md Hasibul Islam: MATLAB, SolidWorks, COMSOL, Arduino, Python, C/C++, web development and ethical hacking."),
+  "projects": ("Projects & Research by Md Hasibul Islam | CFD, ML, UAV, Web",
+               "Research and projects by Md Hasibul Islam: ML flow visualization, MHD convection (Heliyon), a Peltier air conditioner, a UAV, and web and security builds."),
+  "achievements": ("Achievements of Md Hasibul Islam | President's Scout Award",
+                   "Awards and leadership of Md Hasibul Islam: President's Scout Award, Vice President of BUET Journalists Society, lifelong blood donor and martial arts."),
+  "gallery": ("Gallery | Photos of Md Hasibul Islam at BUET and Beyond",
+              "Photos of Md Hasibul Islam from workshops, competitions and BUET campus life, plus his hobbies: photography, travel, martial arts and collecting currency."),
+  "writing": ("Bangla Stories & Essays by Md Hasibul Islam | বাংলা গল্প",
+              "Bangla fiction, essays and reflections by Md Hasibul Islam (Hasib): বাংলা গল্প, প্রবন্ধ ও স্মৃতিকথা, including শেষ পাতার আগে and BUET life stories."),
+  "memories": ("Memories | Personal Bangla Writing by Md Hasibul Islam",
+               "Personal writing by Md Hasibul Islam arranged by year: school days in Lakshmipur, college in Dhaka, life at BUET and the moments in between. স্মৃতিকথা।"),
+  "moments": ("Moments | Photo Journal of Md Hasibul Islam (Hasib)",
+              "A photo journal by Md Hasibul Islam: travels across Bangladesh, campus days at BUET, family and the everyday moments worth remembering."),
+}
+PAGE_FILES = {"home": "index.html", "about": "about.html", "journey": "journey.html", "skills": "skills.html", "projects": "projects.html",
+              "achievements": "achievements.html", "gallery": "gallery.html", "writing": "blogs/index.html", "memories": "memories/index.html", "moments": "moments/index.html"}
+PAGE_PATH = {k: ("" if v == "index.html" else v.replace("index.html", "")) for k, v in PAGE_FILES.items()}
+PAGE_NAME = {"home": "Home", "about": "About", "journey": "Journey", "skills": "Skills", "projects": "Projects", "achievements": "Achievements",
+             "gallery": "Gallery", "writing": "Writing", "memories": "Memories", "moments": "Moments"}
+
+def page_seo(settings, key):
+    t, d = DEFAULT_SEO[key]; o = ((settings.get("pageSeo") or {}).get(key) or {})
+    if key == "home" and (settings.get("seo") or {}).get("description"): d = settings["seo"]["description"]
+    return (o.get("title") or t).strip(), (o.get("description") or d).strip()
+
+def static_main(key, data, posts):
+    """Plain, readable HTML of the page content (links included) for search engines and no-JS visitors."""
+    e = lambda t: _html.escape(str(t or ""), quote=True)
+    site, about, root = data.get("site") or {}, data.get("about") or {}, "../" if "/" in PAGE_FILES[key] else ""
+    plink = lambda r: f'<li><a href="{root}post/{r["id"]}/" lang="bn">{e(r["title"])}</a> <small>{e(r["date"])} · {e(CAT_EN.get(r["category"], r["category"]))}</small></li>'
+    tb = {str(a).lower(): b for a, b in (data.get("titleblock") or [])}
+    out = []
+    if key == "home":
+        out += [f"<h1>{e(tb.get('name') or site.get('name'))}</h1>", f"<p>{e(about.get('intro'))}</p>",
+                "<ul>" + "".join(f"<li><strong>{e(a)}:</strong> {e(b)}</li>" for a, b in (data.get("titleblock") or []) if str(a).lower() != "name") + "</ul>",
+                "<h2>Explore</h2><ul>" + "".join(f'<li><a href="{e(x[1])}">{e(x[0])}</a>: {e(x[2])}</li>' for x in (data.get("explore") or []) if len(x) >= 3) + "</ul>",
+                "<h2>Latest writing</h2><ul>" + "".join(plink(r) for r in posts[:6]) + "</ul>"]
+    elif key == "about":
+        out += ["<h1>About Md Hasibul Islam</h1>", f"<p>{e(about.get('intro'))}</p>"] + [f"<p>{e(x)}</p>" for x in about.get("paragraphs") or []]
+    elif key == "journey":
+        out += ["<h1>Journey</h1><ol>" + "".join(f"<li><strong>{e(x.get('title'))}</strong>, {e(x.get('org'))} ({e(x.get('period'))}). {e(x.get('text'))}</li>" for x in data.get("timeline") or []) + "</ol>"]
+    elif key == "skills":
+        out += ["<h1>Skills</h1>"] + [f"<h2>{e(g.get('group'))}</h2><p>{e(', '.join(g.get('items') or []))}</p>" for g in data.get("skills") or []]
+    elif key == "projects":
+        out += ["<h1>Projects</h1>"] + [f"<h2>{e(x.get('title'))}</h2><p><em>{e(x.get('meta'))}</em></p><p>{e(x.get('text'))}</p>" for x in (data.get("projects") or []) + (data.get("other_projects") or [])]
+    elif key == "achievements":
+        out += ["<h1>Achievements</h1><ul>" + "".join(f"<li><strong>{e(x.get('title'))}</strong>: {e(x.get('text'))}</li>" for x in data.get("achievements") or []) + "</ul>"]
+    elif key == "gallery":
+        out += ["<h1>Gallery</h1><p>Hobbies: " + e(", ".join(h.get("title", "") for h in data.get("hobbies") or [])) + "</p><ul>" +
+                "".join(f"<li>{e(x.get('caption'))}</li>" for x in data.get("photos") or [] if x.get("caption")) + "</ul>"]
+    elif key == "writing":
+        out += ["<h1>Writing</h1><p>Bangla fiction, essays and reflections by Md Hasibul Islam.</p><ul>" + "".join(plink(r) for r in posts) + "</ul>"]
+    elif key == "memories":
+        out += ["<h1>Memories</h1><ul>" + "".join(plink(r) for r in posts if r["category"] == "ব্যক্তিগত") + "</ul>"]
+    elif key == "moments":
+        out += ["<h1>Moments</h1><p>A photo journal: travels, campus days, family and everyday moments.</p>"]
+    return '<div class="wrap seo-static">' + "".join(out) + "</div>"
+
+def page_jsonld(key, data, settings, title, desc):
+    site, about = data.get("site") or {}, data.get("about") or {}
+    url = f"{SITE}/{PAGE_PATH[key]}"
+    graph = [{"@type": "WebPage", "@id": url, "url": url, "name": title, "description": desc, "inLanguage": "bn" if key in ("writing", "memories") else "en",
+              "isPartOf": {"@id": SITE + "/#website"}, "about": {"@id": SITE + "/#person"}}]
+    if key != "home":
+        graph.append({"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": SITE + "/"},
+                                                                     {"@type": "ListItem", "position": 2, "name": PAGE_NAME[key], "item": url}]})
+    else:
+        tb = {str(a).lower(): b for a, b in (data.get("titleblock") or [])}
+        knows = [i for g in (data.get("skills") or []) for i in (g.get("items") or [])][:20]
+        graph += [{"@type": "WebSite", "@id": SITE + "/#website", "url": SITE + "/", "name": settings.get("siteTitle") or "HasibMania", "inLanguage": ["en", "bn"], "publisher": {"@id": SITE + "/#person"}},
+                  {"@type": "Person", "@id": SITE + "/#person", "name": tb.get("name") or "Md Hasibul Islam", "alternateName": ["Hasib", "Hasibul Islam", "Hasib Rockie", "HasibMania", "মোঃ হাসিবুল ইসলাম"],
+                   "url": SITE + "/", "image": about.get("photo") or None, "description": desc, "jobTitle": settings.get("heroRole") or "Mechanical Engineer",
+                   "alumniOf": [{"@type": "CollegeOrUniversity", "name": "Bangladesh University of Engineering and Technology (BUET)"}, {"@type": "CollegeOrUniversity", "name": "Institute of Business Administration, University of Dhaka"}],
+                   "worksFor": {"@type": "GovernmentOrganization", "name": "Bangladesh Standards and Testing Institution (BSTI)"},
+                   "homeLocation": {"@type": "Place", "name": "Bangladesh"}, "knowsAbout": knows,
+                   "sameAs": sorted({l.get("url") for l in (settings.get("social") or site.get("social") or []) if str(l.get("url", "")).startswith("https://")})}]
+    return json.dumps({"@context": "https://schema.org", "@graph": graph}, ensure_ascii=False).replace("</", "<\\/")
+
+def write_page_seo(data, posts, settings):
+    out, e = [], (lambda t: _html.escape(str(t or ""), quote=True))
+    for key, fname in PAGE_FILES.items():
+        f = OUT / fname
+        if not f.exists(): continue
+        t0 = f.read_text(encoding="utf-8"); title, desc = page_seo(settings, key); t = t0
+        sub = lambda pat, rep: re.sub(pat, lambda m: rep, t, count=1, flags=re.S)
+        t = sub(r"<title>.*?</title>", f"<title>{e(title)}</title>")
+        t = sub(r'<meta name="description" content="[^"]*">', f'<meta name="description" content="{e(desc)}">')
+        t = sub(r'<meta property="og:title" content="[^"]*">', f'<meta property="og:title" content="{e(title)}">')
+        t = sub(r'<meta property="og:description" content="[^"]*">', f'<meta property="og:description" content="{e(desc)}">')
+        t = sub(r'<meta name="twitter:title" content="[^"]*">', f'<meta name="twitter:title" content="{e(title)}">')
+        t = sub(r'<meta name="twitter:description" content="[^"]*">', f'<meta name="twitter:description" content="{e(desc)}">')
+        t = sub(r'<meta name="twitter:card" content="[^"]*">', '<meta name="twitter:card" content="summary_large_image">')
+        if '<meta name="robots"' not in t: t = t.replace('<meta name="viewport"', '<meta name="robots" content="index, follow, max-image-preview:large">\n<meta name="viewport"', 1)
+        t = re.sub(r'<script type="application/ld\+json"(?: id="ld-page")?>\s*\{\s*"@context":\s*"https://schema\.org".*?</script>\n?', "", t, flags=re.S)
+        t = t.replace("</head>", f'<script type="application/ld+json" id="ld-page">{page_jsonld(key, data, settings, title, desc)}</script>\n</head>', 1)
+        t = sub(r'<main id="main" tabindex="-1">.*?</main>', f'<main id="main" tabindex="-1">{static_main(key, data, posts)}</main>')
+        if t != t0: f.write_text(t, encoding="utf-8"); out.append(fname)
     return out
 
 if __name__ == "__main__": main()

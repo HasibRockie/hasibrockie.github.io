@@ -1,5 +1,5 @@
 // theme.js - applies saved settings; accepts live-preview messages ONLY from the admin origin.
-import { loadSettings } from "./data.js?v=202611270222";
+import { loadSettings } from "./data.js?v=202611270253";
 const cfg = window.SITE_CONFIG || {};
 let previewOn = false;
 export const isPreview = () => new URLSearchParams(window.location.search).has("adminPreview");
@@ -24,7 +24,10 @@ export function initSettings(onChange) {
 export function applySeo(S, page) {
   const abs = (p) => { try { return new URL(p, window.location.origin + "/").href; } catch (_) { return ""; } };
   const set = (sel, attr, val) => { const el = document.querySelector(sel); if (el && val) el.setAttribute(attr, val); };
-  if (page === "home" && S.seo.description) { set('meta[name="description"]', "content", S.seo.description); set('meta[property="og:description"]', "content", S.seo.description); set('meta[name="twitter:description"]', "content", S.seo.description); }
+  const own = (S.pageSeo || {})[page] || {};                                  // per-page override from Site settings > SEO
+  if (own.title) { document.title = own.title; set('meta[property="og:title"]', "content", own.title); set('meta[name="twitter:title"]', "content", own.title); }
+  if (own.description) { set('meta[name="description"]', "content", own.description); set('meta[property="og:description"]', "content", own.description); set('meta[name="twitter:description"]', "content", own.description); }
+  if (page === "home" && S.seo.description && !own.description) { set('meta[name="description"]', "content", S.seo.description); set('meta[property="og:description"]', "content", S.seo.description); set('meta[name="twitter:description"]', "content", S.seo.description); }
   if (S.seo.ogImage) set('meta[property="og:image"]', "content", abs(S.seo.ogImage));
   if (S.favicon) set('link[rel="icon"]', "href", abs(S.favicon));
 }

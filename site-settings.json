@@ -61,7 +61,7 @@
   "width": 1260,
   "accent": "#ed7750",
   "bnFont": "Noto Serif Bengali",
-  "preset": "midnight",
+  "preset": "paper",
   "social": [
     {
       "url": "https://www.linkedin.com/in/hasib009/",
@@ -85,7 +85,7 @@
   "pattern": "grid",
   "tagline": "But, I've promises to keep, And miles to go before I sleep.",
   "bodyFont": "Bricolage Grotesque",
-  "heroRole": "Mechanical engineer (BUET) · Field Officer at BSTI · Researcher · Web developer · Writer",
+  "heroRole": "Mechanical engineer (BUET) · Assistant Commissioner (recom., 47th BCS) · Researcher · Web developer · Writer",
   "sections": [
     {
       "key": "explore",
@@ -104,15 +104,15 @@
       "visible": true
     }
   ],
-  "fontScale": 1.13,
-  "heroPhoto": true,
+  "fontScale": 0.95,
+  "heroPhoto": false,
   "siteTitle": "HasibMania",
   "animations": true,
   "footerText": "hasibrockie.github.io",
   "headingFont": "Newsreader",
   "announcement": {
     "link": "",
-    "text": "",
+    "text": "hello",
     "tone": "info",
     "until": "",
     "enabled": false,
