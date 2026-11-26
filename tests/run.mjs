@@ -51,7 +51,7 @@ function makeFetch({ mode = "ok", delay = 0, settings = SETTINGS, rowsFor = {} }
       if (p.startsWith("/storage/v1/object/sign/")) return opts.headers.Authorization === "Bearer T" ? json({ signedURL: p.replace("/storage/v1", "") + "?token=abc" }) : json({}, 401);
       const t = p.replace("/rest/v1/", "");
       if (t === "site_settings") return json([{ settings }]);
-      if (t === "moments") return (opts.headers || {}).Authorization === "Bearer T" ? json([{ id: 1, date: "2026-10-21", place: "Zinda Park", caption: "<b>x</b>", storage_path: "moments/2026/a.webp" }, { id: 2, date: "2026-10-20", place: "Ramna", caption: "", storage_path: "moments/2026/b.webp" }]) : json({ message: "denied" }, 401);
+      if (t === "moments") return json([{ id: 1, date: "2026-10-21", place: "Zinda Park", caption: "<b>x</b>", storage_path: "moments/2026/a.webp" }, { id: 2, date: "2026-10-20", place: "Ramna", caption: "", storage_path: "moments/2026/b.webp" }]);
       if (t === "posts") { const id = u.searchParams.get("id").replace("eq.", ""); if (rowsFor[id]) return json(rowsFor[id]); const p0 = POSTS.find((x) => String(x.id) === id); return json(id === "44" ? [MD_POST] : p0 ? [{ id: p0.id, date: p0.date, category: p0.category, title: p0.title, author: p0.author, paragraphs: parasOf(p0), media: [{ slot: 1, path: p0.img1, caption: "" }], extra: {} }] : []); }
       return T[t] ? json(T[t]) : json([], 404);
     }
@@ -78,7 +78,7 @@ const S = JSON.parse(fs.readFileSync(path.join(root, "assets/js/settings-schema.
 
 const run = {
   async shells() {
-    const files = ["index.html", "about.html", "journey.html", "skills.html", "projects.html", "achievements.html", "gallery.html", "blogs/index.html", "memories/index.html", "post/index.html", "moments/index.html", "404.html"];
+    const files = ["index.html", "about.html", "journey.html", "skills.html", "projects.html", "achievements.html", "gallery.html", "blogs/index.html", "memories/index.html", "post/index.html", "moments/index.html", "labyrinth/index.html", "404.html"];
     for (const f of files) {
       const h = fs.readFileSync(path.join(root, f), "utf8");
       ok(/http-equiv="Content-Security-Policy"/.test(h) && /script-src 'self'/.test(h) && !/unsafe-inline|unsafe-eval/.test(h), f + ": strict CSP meta");
@@ -86,7 +86,8 @@ const run = {
       ok((h.match(/<main id="main"/g) || []).length === 1 && /data-page="/.test(h) && /assets\/js\/app\.js/.test(h) && /assets\/js\/boot\.js/.test(h), f + ": main/data-page/entry scripts");
       ok(/<link rel="canonical"/.test(h) || f === "404.html" || f === "post/index.html", f + ": canonical");
     }
-    ok(/name="robots" content="noindex/.test(fs.readFileSync(path.join(root, "moments/index.html"), "utf8")), "moments page is noindex");
+    ok(!/noindex/.test(fs.readFileSync(path.join(root, "moments/index.html"), "utf8")), "moments page is public and indexable"); ok(/name="robots" content="noindex/.test(fs.readFileSync(path.join(root, "labyrinth/index.html"), "utf8")), "labyrinth page is noindex (unlisted)");
+    ok(!fs.readdirSync(root).filter((f) => f.endsWith(".html")).some((f) => /labyrinth/.test(fs.readFileSync(path.join(root, f), "utf8"))), "no public page links to the labyrinth");
     const css = fs.readFileSync(path.join(root, "assets/css/site.css"), "utf8");
     ok(/:lang\(bn\)[^{]*\{letter-spacing:0!important/.test(css), "Bangla: no letter-spacing"); ok(!/@import/.test(css), "css: no @import"); ok(/prefers-reduced-motion/.test(css) && /data-anim=off/.test(css), "css: reduced motion + animations off");
     for (const f of fs.readdirSync(path.join(root, "assets/js")).filter((x) => x.endsWith(".js"))) { const t = fs.readFileSync(path.join(root, "assets/js", f), "utf8"); ok(!/service_role|sb_secret|eval\(|new Function/.test(t), f + ": no secrets/eval"); }
@@ -101,7 +102,7 @@ const run = {
     ok(e.$$("main section.section h2")[0].textContent.includes("Latest writing"), "section order from settings"); ok(e.$("footer").textContent.includes("Test footer"), "footer text from settings");
     ok(!e.$(".notice"), "no degraded-mode notice when the API works"); ok(noInline(e.d), "no inline style/handlers in rendered markup (CSP-safe)");
     ok(!!e.w.localStorage.getItem("sc:v1:settings") && !!e.w.localStorage.getItem("sc:v1:profile"), "responses cached for next visit");
-    ok(!e.fetchImpl.calls.some((c) => /moments/.test(c)), "home never touches moments");
+    ok(!e.fetchImpl.calls.some((c) => /storage\/v1\/object\/sign|auth\/v1/.test(c)), "home never signs in or signs URLs");
     e.$(".theme").click(); ok(e.d.documentElement.dataset.theme === "dark" || e.d.documentElement.dataset.theme === "light", "visitor theme toggle works"); ok(e.w.localStorage.getItem("theme") && !/theme/.test(e.w.localStorage.getItem("sc:v1:settings")), "toggle is local only; settings cache untouched");
   },
   async "api-down"() {
@@ -158,14 +159,15 @@ const run = {
     const e0 = e.w.localStorage.getItem("sc:v1:settings"); ok(!/civic/.test(e0 || ""), "preview is never written to the settings cache");
   },
   async moments() {
-    const e = await boot("moments"); await waitFor(() => e.$("#mf")); ok(!e.fetchImpl.calls.some((c) => /rest\/v1\/moments/.test(c)), "no moments request before the passcode");
-    const submit = async (pw) => { e.$("#mc").value = pw; e.$("#mf").dispatchEvent(new e.w.Event("submit", { cancelable: true, bubbles: true })); await sleep(60); };
-    await submit("wrong"); ok(/doesn’t match/.test(e.$("#mm").textContent) && e.$("#mc").getAttribute("aria-invalid") === "true", "wrong passcode message"); ok(!e.w.sessionStorage.getItem("mm:tok"), "no token after a wrong passcode");
-    await submit("open-sesame"); await waitFor(() => e.$$(".moment-list li").length === 2); ok(true, "correct passcode shows the moments");
-    ok(e.$$(".moment-photo img").every((i) => i.src.includes("/storage/v1/object/sign/moments-private/")), "images use short-lived signed URLs"); ok(/&lt;b&gt;|<b>/.test(e.$(".moment-caption").innerHTML) && !e.$(".moment-caption b"), "captions are escaped");
-    ok(e.w.sessionStorage.getItem("mm:tok") && !Object.keys(e.w.localStorage).some((k) => /moment|T"/.test(k + e.w.localStorage.getItem(k))), "token only in sessionStorage; nothing private in localStorage");
-    e.$("#lock").click(); await waitFor(() => e.$("#mf")); ok(!e.w.sessionStorage.getItem("mm:tok"), "Lock clears the session");
+    const e = await boot("moments"); await waitFor(() => e.$$(".mtile").length === 2, 5000); ok(!e.$("#mf"), "no passcode gate: moments are public");
+    ok(e.fetchImpl.calls.some((c) => /rest\/v1\/moments\?.*status=eq\.published/.test(c)), "only published moments are requested");
+    ok(e.$$(".mtile img").every((i) => i.src.includes("/storage/v1/object/public/moments-private/")), "images use public storage URLs");
+    ok(/&lt;b&gt;/.test(e.$(".mtile .ov").innerHTML) && !e.$(".mtile .ov span b"), "captions are escaped");
+    const q = e.$("#mq"); q.value = "ramna"; q.dispatchEvent(new e.w.Event("input")); ok(e.$$(".mtile").length === 1, "search filters moments");
+    q.value = ""; q.dispatchEvent(new e.w.Event("input")); e.$('[data-v="timeline"]').click(); ok(e.$$(".mtl .card").length === 2 && !!e.$(".myear"), "timeline view groups by year");
+    ok(!!e.w.localStorage.getItem("sc:v1:moments"), "moments cached for an instant repaint"); ok(noInline(e.d), "no inline style/handlers (CSP-safe)");
   },
+
   async views() {
     const rpc = (e) => e.fetchImpl.calls.filter((c) => c === "/rest/v1/rpc/track_view").length;
     const e = await boot("post", { query: "?id=44" }); await waitFor(() => e.$(".md strong"), 5000); await sleep(50);

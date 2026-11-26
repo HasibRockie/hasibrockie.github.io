@@ -1,5 +1,7 @@
 # Public site (plan step 5)
 
+> **Update (Nov 2026):** redesigned layout (responsive down to 320 px), **Moments is now public** (grid / timeline / slideshow, search, filters, lightbox, share links), contact form on About, announcement banner, 8 new colour themes, and a hidden riddle maze at `/labyrinth/` (noindex, not linked anywhere). Requires `sql/08_features.sql` from the admin repo. Run `python scripts/configure.py --bump` after any CSS/JS change: it now versions the module imports too.
+
 Same URLs, same look and feel (Technical Journal), now data-driven. Copy these files over your `hasibrockie.github.io` clone. Images in `assets/imgs/` are untouched and not included.
 
 ## What changed

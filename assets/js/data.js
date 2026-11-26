@@ -1,5 +1,5 @@
 // data.js - API first, cache for instant paint, static snapshot if the API is slow/down/paused.
-import { dataFromTables, listItemFromLegacy, normPost } from "./legacy.js";
+import { dataFromTables, listItemFromLegacy, normPost } from "./legacy.js?v=202611261701";
 
 const cfg = window.SITE_CONFIG || {};
 const R = (document.body && document.body.dataset.root) || "";
@@ -22,7 +22,7 @@ const QUERY = {
   achievements: "achievements?select=*&order=sort_order.asc", hobbies: "hobbies?select=*&order=sort_order.asc", photos: "photos?select=*&order=sort_order.asc",
   posts_list: "posts_list?select=id,date,category,title,author,cover,excerpt,words&order=date.desc,id.desc"
 };
-export const NEEDS = { home: ["profile", "posts_list"], about: ["profile"], journey: ["timeline", "profile"], skills: ["skills", "profile"], projects: ["projects", "profile"],
+export const NEEDS = { home: ["profile", "posts_list", "projects", "achievements"], about: ["profile"], journey: ["timeline", "profile"], skills: ["skills", "profile"], projects: ["projects", "profile"],
   achievements: ["achievements", "profile"], gallery: ["hobbies", "photos", "profile"], writing: ["posts_list", "profile"], memories: ["posts_list", "profile"],
   post: ["posts_list", "profile"], moments: ["profile"], 404: ["profile"] };
 

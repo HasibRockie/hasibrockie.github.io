@@ -1,5 +1,5 @@
 // theme.js - applies saved settings; accepts live-preview messages ONLY from the admin origin.
-import { loadSettings } from "./data.js";
+import { loadSettings } from "./data.js?v=202611261701";
 const cfg = window.SITE_CONFIG || {};
 let previewOn = false;
 export const isPreview = () => new URLSearchParams(window.location.search).has("adminPreview");

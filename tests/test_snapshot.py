@@ -100,7 +100,7 @@ ok(ex43["excerpt"] == (body.strip()[:220] if len(body.strip()) > 80 else ex43["e
 ok(rd(out / "site-settings.json") == {"preset": "paper"}, "site-settings.json")
 ok(not (out / "moments.json").exists(), "moments are never exported")
 sm = (out / "sitemap.xml").read_text(encoding="utf-8"); locs = re.findall(r"<loc>([^<]*)</loc>", sm)
-ok(len(locs) == 9 + len(POSTS) + 1 and "https://hasibrockie.github.io/post/?id=44" in locs and not any("moments" in l or "id=45" in l or "id=46" in l for l in locs), "sitemap: 9 pages + all published posts, no moments/drafts")
+ok(len(locs) == 10 + len(POSTS) + 1 and "https://hasibrockie.github.io/post/?id=44" in locs and "https://hasibrockie.github.io/moments/" in locs and not any("id=45" in l or "id=46" in l for l in locs), "sitemap: 10 pages (incl. public moments) + all published posts, no drafts")
 ok(sm.startswith('<?xml') and "<urlset" in sm and "&" not in sm.replace("&amp;", ""), "sitemap is valid-looking XML")
 ok(all(h[1] == KEYV for h in STATE["hits"]), "every request used the public key only")
 

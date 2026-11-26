@@ -30,30 +30,59 @@
       dark:  { bg: "#0e1612", surface: "#15211b", text: "#e8efe9", muted: "#a4b3a9", accent: "#5fc7a0", onAccent: "#0e1612", signal: "#d9b45b", border: "#2a3a31" } },
     midnight: { label: "Midnight Ink",
       light: { bg: "#f3f4f8", surface: "#ffffff", text: "#14151f", muted: "#525670", accent: "#4338ca", onAccent: "#ffffff", signal: "#b7791f", border: "#d3d6e4" },
-      dark:  { bg: "#0c0d14", surface: "#14161f", text: "#e9eaf2", muted: "#a3a7bd", accent: "#8b93ff", onAccent: "#0c0d14", signal: "#f5b942", border: "#262a3b" } }
+      dark:  { bg: "#0c0d14", surface: "#14161f", text: "#e9eaf2", muted: "#a3a7bd", accent: "#8b93ff", onAccent: "#0c0d14", signal: "#f5b942", border: "#262a3b" } },
+  blueprint: { label: "Blueprint",
+    light: { bg: "#eef3f9", surface: "#ffffff", text: "#0a1f3c", muted: "#4a5d78", accent: "#0b5cad", onAccent: "#ffffff", signal: "#e07b00", border: "#c6d4e6" },
+    dark:  { bg: "#0a1a2f", surface: "#0f2440", text: "#e3edf9", muted: "#9fb4cf", accent: "#5cb2ff", onAccent: "#0a1a2f", signal: "#ffb347", border: "#22406a" } },
+  graphite: { label: "Graphite",
+    light: { bg: "#f2f2f0", surface: "#ffffff", text: "#1b1c1e", muted: "#55585e", accent: "#2f3a4a", onAccent: "#ffffff", signal: "#c2410c", border: "#d6d6d2" },
+    dark:  { bg: "#121314", surface: "#1b1c1f", text: "#ececea", muted: "#a7a9ad", accent: "#d6dbe3", onAccent: "#121314", signal: "#fb923c", border: "#2c2e33" } },
+  terracotta: { label: "Terracotta",
+    light: { bg: "#faf4ef", surface: "#fffaf6", text: "#2b1d16", muted: "#6a554a", accent: "#b4441f", onAccent: "#ffffff", signal: "#2f6f6a", border: "#ead8ca" },
+    dark:  { bg: "#1b1310", surface: "#261b16", text: "#f4e9e1", muted: "#c2ad9f", accent: "#f08a64", onAccent: "#1b1310", signal: "#6cc3bb", border: "#3d2c24" } },
+  ocean: { label: "Ocean",
+    light: { bg: "#eef7f8", surface: "#ffffff", text: "#0b2a33", muted: "#4b6670", accent: "#0b6e84", onAccent: "#ffffff", signal: "#d9480f", border: "#c7e0e4" },
+    dark:  { bg: "#071a20", surface: "#0d262e", text: "#e2f2f5", muted: "#9dbcc4", accent: "#4fd1e8", onAccent: "#071a20", signal: "#ff8a5b", border: "#1d3c46" } },
+  forest: { label: "Forest",
+    light: { bg: "#f1f5ef", surface: "#fbfdf9", text: "#15241a", muted: "#4d5f52", accent: "#2d6a3e", onAccent: "#ffffff", signal: "#a16207", border: "#cfdcca" },
+    dark:  { bg: "#0d1510", surface: "#142019", text: "#e5efe7", muted: "#a3b8a8", accent: "#74c98c", onAccent: "#0d1510", signal: "#e0b44c", border: "#26382c" } },
+  rose: { label: "Rose Quartz",
+    light: { bg: "#fbf3f5", surface: "#ffffff", text: "#2a1420", muted: "#6b4d5b", accent: "#b0275a", onAccent: "#ffffff", signal: "#6d4cc2", border: "#ecd3dc" },
+    dark:  { bg: "#1a0f14", surface: "#25161d", text: "#f6e8ee", muted: "#c9a8b7", accent: "#ff86b0", onAccent: "#1a0f14", signal: "#b39dff", border: "#3e2531" } },
+  aurora: { label: "Aurora",
+    light: { bg: "#f4f3fb", surface: "#ffffff", text: "#17142b", muted: "#57537a", accent: "#5b3fd6", onAccent: "#ffffff", signal: "#0e9f6e", border: "#dad6ef" },
+    dark:  { bg: "#0b0a18", surface: "#141228", text: "#ecebfa", muted: "#a9a6c9", accent: "#a594ff", onAccent: "#0b0a18", signal: "#34d399", border: "#28254a" } },
+  sand: { label: "Desert Sand",
+    light: { bg: "#f7f3ea", surface: "#fffdf7", text: "#262118", muted: "#625a49", accent: "#7a5a12", onAccent: "#ffffff", signal: "#2563eb", border: "#e4dccb" },
+    dark:  { bg: "#17140f", surface: "#211d16", text: "#f1ebde", muted: "#bdb39f", accent: "#e2b75a", onAccent: "#17140f", signal: "#7aa7ff", border: "#383126" } }
   };
 
   var CARDS = {
     flat:     { radius: "2px",  border: "0",                     shadow: "none" },
     outlined: { radius: "4px",  border: "1px solid var(--border)", shadow: "none" },
-    raised:   { radius: "10px", border: "1px solid var(--border)", shadow: "0 12px 32px rgba(0,0,0,.14)" }
+    raised:   { radius: "10px", border: "1px solid var(--border)", shadow: "0 12px 32px rgba(0,0,0,.14)" },
+    soft:     { radius: "18px", border: "1px solid var(--border)", shadow: "0 1px 2px rgba(0,0,0,.06), 0 8px 24px rgba(0,0,0,.08)" }
   };
   var DENSITY = { compact: 0.8, comfortable: 1, spacious: 1.25 };
   var HEROES = ["split", "centered", "minimal"];
   var MODES = ["auto", "light", "dark"];
-  var SECTION_KEYS = ["explore", "latest"];
+  var SECTION_KEYS = ["explore", "latest", "projects", "moments"];
+  var PATTERNS = ["grid", "dots", "lines", "none"];
+  var TONES = ["info", "success", "warning", "celebrate"];
   var DEFAULT_NAV = [
     { label: "Home", href: "index.html", visible: true }, { label: "About", href: "about.html", visible: true },
     { label: "Journey", href: "journey.html", visible: true }, { label: "Skills", href: "skills.html", visible: true },
     { label: "Projects", href: "projects.html", visible: true }, { label: "Achievements", href: "achievements.html", visible: true },
     { label: "Writing", href: "blogs/", visible: true }, { label: "Memories", href: "memories/", visible: true },
-    { label: "Gallery", href: "gallery.html", visible: true }
+    { label: "Gallery", href: "gallery.html", visible: true }, { label: "Moments", href: "moments/", visible: true }
   ];
 
   var DEFAULTS = {
     preset: "journal", accent: "", mode: "auto",
     headingFont: "Bricolage Grotesque", bodyFont: "IBM Plex Sans", bnFont: "Anek Bangla",
     fontScale: 1, width: 1120, card: "outlined", density: "comfortable", animations: true, hero: "split",
+    pattern: "grid", heroPhoto: true,
+    announcement: { enabled: false, text: "", link: "", linkLabel: "", tone: "info", until: "" },
     sections: SECTION_KEYS.map(function (k) { return { key: k, visible: true }; }),
     nav: DEFAULT_NAV.map(function (n) { return { label: n.label, href: n.href, visible: n.visible }; }),
     siteTitle: "", tagline: "", footerText: "", social: [],
@@ -93,6 +122,12 @@
     c.density = oneOf(raw.density, Object.keys(DENSITY), d.density);
     c.animations = raw.animations === true || raw.animations === "true" || (raw.animations === undefined);
     c.hero = oneOf(raw.hero, HEROES, d.hero);
+    c.pattern = oneOf(raw.pattern, PATTERNS, d.pattern);
+    c.heroPhoto = !(raw.heroPhoto === false || raw.heroPhoto === "false");
+    var an = raw.announcement && typeof raw.announcement === "object" ? raw.announcement : {};
+    c.announcement = { enabled: an.enabled === true || an.enabled === "true", text: str(an.text, 220), link: safeUrl(an.link, true),
+      linkLabel: str(an.linkLabel, 40), tone: oneOf(an.tone, TONES, "info"), until: /^\d{4}-\d{2}-\d{2}$/.test(str(an.until, 10)) ? str(an.until, 10) : "" };
+    if (an.link && !c.announcement.link) w.push("Announcement link must be a relative path or https:// URL; ignored.");
 
     var seen = {}, secs = [];
     (Array.isArray(raw.sections) ? raw.sections : []).forEach(function (s) {
@@ -160,7 +195,7 @@
     };
   }
   function toAttrs(clean) {
-    return { "data-mode": clean.mode, "data-anim": clean.animations ? "on" : "off", "data-hero": clean.hero, "data-card": clean.card };
+    return { "data-mode": clean.mode, "data-anim": clean.animations ? "on" : "off", "data-hero": clean.hero, "data-card": clean.card, "data-pattern": clean.pattern };
   }
   function googleFontsHref(clean) {
     var fams = [], seen = {};
@@ -171,7 +206,7 @@
   }
 
   var api = { FONTS: FONTS, PRESETS: PRESETS, CARDS: CARDS, DENSITY: DENSITY, HEROES: HEROES, MODES: MODES,
-    SECTION_KEYS: SECTION_KEYS, DEFAULTS: DEFAULTS, validate: validate, safeUrl: safeUrl, ratio: ratio,
+    SECTION_KEYS: SECTION_KEYS, PATTERNS: PATTERNS, TONES: TONES, DEFAULTS: DEFAULTS, validate: validate, safeUrl: safeUrl, ratio: ratio,
     contrastReport: contrastReport, toCssVars: toCssVars, toAttrs: toAttrs, googleFontsHref: googleFontsHref };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   root.SiteSettings = api;

@@ -8,7 +8,7 @@ falls back to, plus sitemap.xml. Writes a file only when its content really chan
        ALLOW_SHRINK=1  accept a much smaller post list (use only after deleting many posts on purpose)
 
 Writes: data.json, posts.json (same legacy format as before), posts-index.json (light list), site-settings.json, sitemap.xml.
-Never writes moments (private). Exit codes: 0 ok, 1 error, 2 refused to overwrite (safety guard).
+Never writes moment rows into the JSON snapshots (the Moments page loads them live). Exit codes: 0 ok, 1 error, 2 refused to overwrite (safety guard).
 """
 import datetime, json, os, re, sys, time, urllib.error, urllib.parse, urllib.request
 from pathlib import Path
@@ -110,7 +110,8 @@ def main():
     pages = [("", "weekly", "1.0", day(posts + prof)), ("about.html", "monthly", "0.8", day(prof)), ("journey.html", "monthly", "0.8", day(T["timeline"])),
              ("skills.html", "monthly", "0.8", day(T["skills"] + prof)), ("projects.html", "monthly", "0.8", day(T["projects"])),
              ("achievements.html", "monthly", "0.8", day(T["achievements"])), ("gallery.html", "monthly", "0.8", day(T["photos"] + T["hobbies"])),
-             ("blogs/", "weekly", "0.9", day(posts)), ("memories/", "monthly", "0.7", day(personal or posts))]
+             ("blogs/", "weekly", "0.9", day(posts)), ("memories/", "monthly", "0.7", day(personal or posts)),
+             ("moments/", "weekly", "0.7", day(T["photos"] + T["hobbies"]))]
     esc = lambda s: s.replace("&", "&amp;").replace("<", "&lt;")
     rows = [f"<url><loc>{esc(SITE + '/' + p)}</loc><lastmod>{lm}</lastmod><changefreq>{cf}</changefreq><priority>{pr}</priority></url>" for p, cf, pr, lm in pages]
     rows += [f"<url><loc>{esc(SITE)}/post/?id={r['id']}</loc><lastmod>{day([r])}</lastmod><changefreq>yearly</changefreq><priority>0.6</priority></url>" for r in sorted(posts, key=lambda r: -r["id"])]

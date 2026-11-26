@@ -15,11 +15,17 @@ root = Path(__file__).resolve().parent.parent
 htmls = [p for p in root.rglob("*.html") if "node_modules" not in p.parts and p.name != "google818061acc27c6c5b.html" and not p.name.startswith("google")]
 
 def bump():
-    v = datetime.date.today().strftime("%Y%m%d"); n = 0
+    v = datetime.datetime.now().strftime("%Y%m%d%H%M"); n = 0
     for p in htmls:
         t = p.read_text(encoding="utf-8"); t2 = re.sub(r"(\.(?:css|js))\?v=\d+", rf"\1?v={v}", t)
         if t2 != t: p.write_text(t2, encoding="utf-8"); n += 1
-    print(f"cache-busting version {v} written to {n} page(s)")
+    # ES module imports between our own scripts carry the same number, so a visitor never mixes old and new modules.
+    m = 0
+    for p in (root / "assets" / "js").glob("*.js"):
+        t = p.read_text(encoding="utf-8")
+        t2 = re.sub(r"""((?:from\s+|import\()\s*["']\./[A-Za-z0-9_-]+\.js)(?:\?v=\d+)?(["'])""", rf"\1?v={v}\2", t)
+        if t2 != t: p.write_text(t2, encoding="utf-8"); m += 1
+    print(f"cache-busting version {v} written to {n} page(s) and {m} module(s)")
 
 if a.bump and not a.url: bump(); sys.exit(0)
 if not (a.url and a.anon and a.admin and a.guest): ap.error("--url, --anon, --admin and --guest-email are required")
