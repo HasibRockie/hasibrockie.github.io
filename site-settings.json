@@ -18,7 +18,7 @@
     {
       "href": "skills.html",
       "label": "Skills",
-      "visible": true
+      "visible": false
     },
     {
       "href": "projects.html",
@@ -28,7 +28,7 @@
     {
       "href": "achievements.html",
       "label": "Achievements",
-      "visible": true
+      "visible": false
     },
     {
       "href": "blogs/",
@@ -38,7 +38,7 @@
     {
       "href": "memories/",
       "label": "Memories",
-      "visible": true
+      "visible": false
     },
     {
       "href": "gallery.html",
@@ -85,6 +85,7 @@
   "pattern": "grid",
   "tagline": "But, I've promises to keep, And miles to go before I sleep.",
   "bodyFont": "Bricolage Grotesque",
+  "heroRole": "Mechanical engineer (BUET) · Field Officer at BSTI · Researcher · Web developer · Writer",
   "sections": [
     {
       "key": "explore",
