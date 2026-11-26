@@ -158,7 +158,7 @@ export function mountMaze(root) {
 <div class="cta"><button class="btn" type="button" id="again">Play again</button>${st.lvl !== "hard" ? '<button class="btn ghost" type="button" id="harder">Try harder</button>' : ""}<button class="btn ghost" type="button" id="copyr">Copy result</button></div></div>`;
     $("again").onclick = () => newGame(); if ($("harder")) $("harder").onclick = () => setLevel(st.lvl === "easy" ? "medium" : "hard");
     $("copyr").onclick = async () => { try { await navigator.clipboard.writeText(`I solved The Labyrinth (${LEVELS[st.lvl].label}) in ${fmtT(t)} with ${st.moves} moves. ${location.href}`); $("copyr").textContent = "Copied ✓"; } catch (_) {} };
-    import("./track.js?v=202611261801").then((m) => m.trackView("mazewin")).catch(() => {});
+    import("./track.js?v=202611270222").then((m) => m.trackView("mazewin")).catch(() => {});
     $("again").focus();
   }
   function setLevel(l) { st.lvl = l; $("fog").checked = LEVELS[l].fog; root.querySelectorAll("[data-l]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.l === l))); clearInterval(timer); newGame(); }

@@ -1,5 +1,5 @@
 // render.js - header/footer and every page. All dynamic text goes through esc(); Markdown goes through the sanitiser in md.js.
-import { renderMd } from "./md.js?v=202611261801";
+import { renderMd } from "./md.js?v=202611270222";
 const B = document.body, R = B.dataset.root || "", P = B.dataset.page;
 export const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 export const imageURL = (src) => (/^https:\/\//i.test(src) ? src : /^(?:[a-z][a-z0-9+.-]*:|\/\/)/i.test(src) ? "" : R + src);
@@ -13,6 +13,20 @@ const SHEET = { home: "Home", about: "About", journey: "Journey", skills: "Skill
 const KICKER = { home: "Welcome", about: "About me", journey: "Education & career", skills: "Toolkit", projects: "Selected work", achievements: "Recognition",
   gallery: "Photographs", writing: "Stories & essays", memories: "Personal archive", moments: "Photo journal" };
 export const sheetNo = (page) => KICKER[page] || SHEET[page] || "";
+// Built-in page text; Site settings > Page text can override each line.
+export const COPY = {
+  journey: "From a primary school in Lakshmipur to BUET, public service and the 47th BCS: the milestones of my education and career, in order.",
+  skills: "The engineering software, programming languages and research methods I rely on, and the fields I keep learning.",
+  projects: "Research in fluid and thermal engineering alongside software and security work. Filter by tool to see where each one was used.",
+  achievements: "Recognition, leadership roles and training that shaped how I work with people and with problems.",
+  gallery: "Workshops, competitions, campus life, and the hobbies that keep me curious.",
+  writing: "Fiction, essays and reflections, mostly in Bangla: stories about people, memory and faith.",
+  memories: "Personal pieces arranged by year: school days, college, BUET, and the stretches in between.",
+  moments: "Little pieces of time, kept in one place: travels, campus days, family and the ordinary afternoons worth remembering.",
+  explore: "Pick a starting point: my background, my work, or my writing.", latest: "New stories and essays, mostly in Bangla.",
+  projectsHome: "Engineering research first, web and security work on the side.", momentsHome: "Little pieces of time, kept in one place."
+};
+export const copy = (S, k) => esc((S && S.copy && S.copy[k]) || COPY[k] || "");
 const readMin = (words) => Math.max(1, Math.round((words || 0) / 180));
 
 // tiny inline icons (markup only; no inline styles or handlers)
@@ -76,7 +90,7 @@ export const notice = (meta) => !meta ? "" : meta.source === "snapshot" ? `<div 
 
 export const head = (page, t, p, extra = "") => `<section class="phead"><div class="pattern" aria-hidden="true"></div><div class="wrap"><p class="sheet">${esc(sheetNo(page))}</p><h1>${t}</h1>${p ? `<p class="lead">${p}</p>` : ""}${extra}</div></section>`;
 const wrap = (h) => `<div class="wrap">${h}</div>`;
-const sec = (n, t, sub, more) => `<div class="section-head rv"><div><h2>${esc(t)}</h2>${sub ? `<p>${esc(sub)}</p>` : ""}</div>${more || ""}</div>`;
+const sec = (n, t, sub, more) => `<div class="section-head rv"><div><h2>${esc(t)}</h2>${sub ? `<p>${sub}</p>` : ""}</div>${more || ""}</div>`;
 const thumbOf = (p) => (p.cover && /^https:\/\//i.test(p.cover) ? p.cover : `assets/imgs/fiction/post${p.id}.png`);
 export const postCards = (ps) => ps.map((p) => `<li class="rv"><a class="card pcard" href="${R}post/${p.id}/"><div class="media">${im(thumbOf(p), "")}<span class="tag">${esc(CAT[p.category] || p.category)}</span></div><div class="body"><h3 lang="bn">${esc(p.title)}</h3>${p.excerpt ? `<p lang="bn">${esc(p.excerpt)}</p>` : ""}<div class="foot"><time datetime="${esc(p.date)}">${esc(fmt(p.date))}</time>${p.words ? `<span>${readMin(p.words)} min read</span>` : ""}</div></div></a></li>`).join("");
 const projCard = (p, i) => `<article class="card proj hov rv" data-tools="${esc((p.tools || []).join("|"))}"><div class="media">${im(p.img, p.title)}</div><div class="body"><p class="meta">${esc(p.meta)}</p><h3>${esc(p.title)}</h3><p>${esc(p.text)}</p>${(p.people || []).map((x) => `<p class="people"><b>${esc(x[0])}:</b> ${esc(x[1])}</p>`).join("")}${p.tools && p.tools.length ? `<ul class="chips">${p.tools.map((t) => `<li>${esc(t)}</li>`).join("")}</ul>` : ""}${(p.links || []).length ? `<div class="links">${p.links.map(link).join("")}</div>` : ""}</div></article>`;
@@ -98,10 +112,10 @@ ${rows.length ? `<dl class="pf-grid">${rows.map((r) => `<div><dt>${esc(r[0])}</d
 ${card}</div></section>`;
     let n = 0;
     const secs = S.sections.filter((x) => x.visible).map((x) => {
-      if (x.key === "explore") return (d.explore || []).length ? `<section class="wrap section explore">${sec(++n, "Explore", "Pick a starting point: my background, my work, or my writing.")}<ul class="grid g3 plist">${d.explore.map((e, i) => `<li class="rv"><a class="card" href="${href(e[1])}"><span class="go">${ICON.arrow}</span><div class="body"><h3>${esc(e[0])}</h3><p>${esc(e[2])}</p></div></a></li>`).join("")}</ul></section>` : "";
-      if (x.key === "latest") return `<section class="wrap section">${sec(++n, "Latest writing", "New stories and essays, mostly in Bangla.", `<a class="link-arrow" href="${R}blogs/">All posts</a>`)}${posts.length ? `<ul class="grid g3 plist">${postCards(posts.slice(0, 3))}</ul>` : '<p class="empty">No posts published yet.</p>'}</section>`;
-      if (x.key === "projects") { const ps = [...(d.projects || []), ...(d.other_projects || [])].slice(0, 3); return ps.length ? `<section class="wrap section">${sec(++n, "Selected projects", "Engineering research first, web and security work on the side.", `<a class="link-arrow" href="${R}projects.html">All projects</a>`)}<ul class="grid g3 plist">${ps.map((p) => `<li class="rv"><a class="card" href="${R}projects.html"><div class="media">${im(p.img, p.title)}</div><div class="body"><p class="num">${esc(p.meta)}</p><h3>${esc(p.title)}</h3></div></a></li>`).join("")}</ul></section>` : ""; }
-      if (x.key === "moments") return `<section class="wrap section" id="home-moments" hidden>${sec(++n, "Moments", "Little pieces of time, kept in one place.", `<a class="link-arrow" href="${R}moments/">Open the gallery</a>`)}<div class="strip" id="strip"></div></section>`;
+      if (x.key === "explore") return (d.explore || []).length ? `<section class="wrap section explore">${sec(++n, "Explore", copy(S, "explore"))}<ul class="grid g3 plist">${d.explore.map((e, i) => `<li class="rv"><a class="card" href="${href(e[1])}"><span class="go">${ICON.arrow}</span><div class="body"><h3>${esc(e[0])}</h3><p>${esc(e[2])}</p></div></a></li>`).join("")}</ul></section>` : "";
+      if (x.key === "latest") return `<section class="wrap section">${sec(++n, "Latest writing", copy(S, "latest"), `<a class="link-arrow" href="${R}blogs/">All posts</a>`)}${posts.length ? `<ul class="grid g3 plist">${postCards(posts.slice(0, 3))}</ul>` : '<p class="empty">No posts published yet.</p>'}</section>`;
+      if (x.key === "projects") { const ps = [...(d.projects || []), ...(d.other_projects || [])].slice(0, 3); return ps.length ? `<section class="wrap section">${sec(++n, "Selected projects", copy(S, "projectsHome"), `<a class="link-arrow" href="${R}projects.html">All projects</a>`)}<ul class="grid g3 plist">${ps.map((p) => `<li class="rv"><a class="card" href="${R}projects.html"><div class="media">${im(p.img, p.title)}</div><div class="body"><p class="num">${esc(p.meta)}</p><h3>${esc(p.title)}</h3></div></a></li>`).join("")}</ul></section>` : ""; }
+      if (x.key === "moments") return `<section class="wrap section" id="home-moments" hidden>${sec(++n, "Moments", copy(S, "momentsHome"), `<a class="link-arrow" href="${R}moments/">Open the gallery</a>`)}<div class="strip" id="strip"></div></section>`;
       return "";
     }).join("");
     return heroHtml + secs;
@@ -114,34 +128,34 @@ ${card}</div></section>`;
 <dl class="facts">${facts.map((f) => `<div class="rv"><dt>${esc(f[0])}</dt><dd>${f[1]}</dd></div>`).join("")}</dl></div></div>
 <section class="section more">${sec(1, "More about me")}<ul class="grid g3 plist">${[["skills.html", "Skills", "Languages, software and tools I work with."], ["achievements.html", "Achievements", "Awards, leadership and training."], ["memories/", "Memories", "Personal posts from school, college and BUET."]].map(([u, t, d]) => `<li class="rv"><a class="card" href="${R}${u}"><span class="go">${ICON.arrow}</span><div class="body"><h3>${t}</h3><p>${d}</p></div></a></li>`).join("")}</ul></section>${contactForm()}`);
   },
-  journey(d) {
+  journey(d, posts, S) {
     const t = d.timeline || [];
-    return head("journey", "Journey", "From a primary school in Lakshmipur to BUET, public service and the 47th BCS: the milestones of my education and career, in order.", '<div class="seg jf" role="group" aria-label="Show"><button type="button" data-f="" aria-pressed="true">Everything</button><button type="button" data-f="edu" aria-pressed="false">Education</button><button type="button" data-f="work" aria-pressed="false">Career</button></div>') + (t.length ? wrap(`<ol class="tl">${t.map((x) => `<li class="rv" data-k="${/school|college|ssc|hsc|b\.?\s?sc|bachelor|master|mba|university|degree|primary|secondary/i.test(x.title + " " + x.org) && !/officer|commissioner|training|engineer at/i.test(x.title) ? "edu" : "work"}"><span class="logo${x.img ? "" : " dot"}">${im(x.img, x.org, 56, 56)}</span><div class="card"><div class="body"><p class="when">${esc(x.period)}</p><h3>${esc(x.title)}</h3><p class="org">${esc(x.org)}</p>${x.text ? `<p>${esc(x.text)}</p>` : ""}${x.points ? `<ul>${x.points.map((y) => `<li>${esc(y)}</li>`).join("")}</ul>` : ""}${x.link ? `<p>${link(x.link)}</p>` : ""}</div></div></li>`).join("")}</ol>`) : empty("Nothing published here yet."));
+    return head("journey", "Journey", copy(S, "journey"), '<div class="seg jf" role="group" aria-label="Show"><button type="button" data-f="" aria-pressed="true">Everything</button><button type="button" data-f="edu" aria-pressed="false">Education</button><button type="button" data-f="work" aria-pressed="false">Career</button></div>') + (t.length ? wrap(`<ol class="tl">${t.map((x) => `<li class="rv" data-k="${/school|college|ssc|hsc|b\.?\s?sc|bachelor|master|mba|university|degree|primary|secondary/i.test(x.title + " " + x.org) && !/officer|commissioner|training|engineer at/i.test(x.title) ? "edu" : "work"}"><span class="logo${x.img ? "" : " dot"}">${im(x.img, x.org, 56, 56)}</span><div class="card"><div class="body"><p class="when">${esc(x.period)}</p><h3>${esc(x.title)}</h3><p class="org">${esc(x.org)}</p>${x.text ? `<p>${esc(x.text)}</p>` : ""}${x.points ? `<ul>${x.points.map((y) => `<li>${esc(y)}</li>`).join("")}</ul>` : ""}${x.link ? `<p>${link(x.link)}</p>` : ""}</div></div></li>`).join("")}</ol>`) : empty("Nothing published here yet."));
   },
-  skills(d) {
+  skills(d, posts, S) {
     const g = d.skills || [];
     const cards = g.map((x, i) => `<section class="card skillcard rv"><div class="body"><h2>${esc(x.group)}</h2><ul class="chips">${(x.items || []).map((it) => `<li>${esc(it)}</li>`).join("")}</ul></div></section>`).join("");
-    return head("skills", "Skills", "The engineering software, programming languages and research methods I rely on, and the fields I keep learning.") + wrap((cards ? `<div class="grid g2">${cards}</div>` : "") + (d.interests ? `<section class="card skillcard rv gap"><div class="body"><h2>Interests</h2><p>${esc(d.interests)}</p></div></section>` : "") || '<p class="empty">Nothing published here yet.</p>');
+    return head("skills", "Skills", copy(S, "skills")) + wrap((cards ? `<div class="grid g2">${cards}</div>` : "") + (d.interests ? `<section class="card skillcard rv gap"><div class="body"><h2>Interests</h2><p>${esc(d.interests)}</p></div></section>` : "") || '<p class="empty">Nothing published here yet.</p>');
   },
-  projects(d) {
+  projects(d, posts, S) {
     const a = d.projects || [], b = d.other_projects || [];
-    return head("projects", "Projects", "Research in fluid and thermal engineering alongside software and security work. Filter by tool to see where each one was used.", '<div class="seg pf" id="pf" role="group" aria-label="Filter by tool"></div>') + wrap((a.length ? `${sec(1, "Research and coursework")}<div class="grid g2">${a.map(projCard).join("")}</div>` : "") + (b.length ? `<div class="gap">${sec(2, "Web and security projects")}</div><div class="grid g2">${b.map(projCard).join("")}</div>` : "") || '<p class="empty">Nothing published here yet.</p>');
+    return head("projects", "Projects", copy(S, "projects"), '<div class="seg pf" id="pf" role="group" aria-label="Filter by tool"></div>') + wrap((a.length ? `${sec(1, "Research and coursework")}<div class="grid g2">${a.map(projCard).join("")}</div>` : "") + (b.length ? `<div class="gap">${sec(2, "Web and security projects")}</div><div class="grid g2">${b.map(projCard).join("")}</div>` : "") || '<p class="empty">Nothing published here yet.</p>');
   },
-  achievements(d) {
+  achievements(d, posts, S) {
     const a = d.achievements || [];
-    return head("achievements", "Achievements", "Recognition, leadership roles and training that shaped how I work with people and with problems.") + wrap(a.length ? `<div class="grid g3">${a.map((x) => `<article class="card ach hov rv">${x.img ? `<div class="media">${im(x.img, x.title, 400, 300)}</div>` : ""}<div class="body"><h3>${esc(x.title)}</h3><p>${esc(x.text)}</p></div></article>`).join("")}</div>` : '<p class="empty">Nothing published here yet.</p>');
+    return head("achievements", "Achievements", copy(S, "achievements")) + wrap(a.length ? `<div class="grid g3">${a.map((x) => `<article class="card ach hov rv">${x.img ? `<div class="media">${im(x.img, x.title, 400, 300)}</div>` : ""}<div class="body"><h3>${esc(x.title)}</h3><p>${esc(x.text)}</p></div></article>`).join("")}</div>` : '<p class="empty">Nothing published here yet.</p>');
   },
-  gallery(d) {
+  gallery(d, posts, S) {
     const h = d.hobbies || [], p = d.photos || [];
-    return head("gallery", "Gallery", "Workshops, competitions, campus life, and the hobbies that keep me curious.") + wrap((h.length ? `${sec(1, "Hobbies")}<ul class="chips rv">${h.map((x) => `<li>${esc(x.title)}</li>`).join("")}</ul>` : "") + (p.length ? `<div class="gap">${sec(2, "Photographs", "Tap a photo to view it larger.")}</div><div class="cols" id="gal">${p.map((x, i) => `<figure class="rv"><button type="button" data-i="${i}" aria-label="View photo: ${esc(x.caption || "photo " + (i + 1))}">${im(x.img, x.caption)}</button>${x.caption ? `<figcaption>${esc(x.caption)}</figcaption>` : ""}</figure>`).join("")}</div>` : "") || '<p class="empty">Nothing published here yet.</p>');
+    return head("gallery", "Gallery", copy(S, "gallery")) + wrap((h.length ? `${sec(1, "Hobbies")}<ul class="chips rv">${h.map((x) => `<li>${esc(x.title)}</li>`).join("")}</ul>` : "") + (p.length ? `<div class="gap">${sec(2, "Photographs", "Tap a photo to view it larger.")}</div><div class="cols" id="gal">${p.map((x, i) => `<figure class="rv"><button type="button" data-i="${i}" aria-label="View photo: ${esc(x.caption || "photo " + (i + 1))}">${im(x.img, x.caption)}</button>${x.caption ? `<figcaption>${esc(x.caption)}</figcaption>` : ""}</figure>`).join("")}</div>` : "") || '<p class="empty">Nothing published here yet.</p>');
   },
-  writing(d, posts) {
+  writing(d, posts, S) {
     const cats = [...new Set(posts.map((p) => p.category))];
-    return head("writing", "Writing", "Fiction, essays and reflections, mostly in Bangla: stories about people, memory and faith.") + wrap(`<div class="tools"><input id="q" type="search" placeholder="Search titles and excerpts" aria-label="Search posts"><button class="btn sm ghost" type="button" id="rnd">Surprise me</button><ul class="seg" id="cats"><li><button aria-pressed="true" data-c="">All</button></li>${cats.map((c) => `<li><button aria-pressed="false" data-c="${esc(c)}">${CAT[c] || esc(c)}</button></li>`).join("")}</ul></div><p class="small muted" id="n" aria-live="polite"></p><ul class="grid g3 plist" id="list"></ul><p class="after"><a class="link-arrow" href="${R}memories/">Personal memories, year by year</a></p>`);
+    return head("writing", "Writing", copy(S, "writing")) + wrap(`<div class="tools"><input id="q" type="search" placeholder="Search titles and excerpts" aria-label="Search posts"><button class="btn sm ghost" type="button" id="rnd">Surprise me</button><ul class="seg" id="cats"><li><button aria-pressed="true" data-c="">All</button></li>${cats.map((c) => `<li><button aria-pressed="false" data-c="${esc(c)}">${CAT[c] || esc(c)}</button></li>`).join("")}</ul></div><p class="small muted" id="n" aria-live="polite"></p><ul class="grid g3 plist" id="list"></ul><p class="after"><a class="link-arrow" href="${R}memories/">Personal memories, year by year</a></p>`);
   },
-  memories(d, posts) {
+  memories(d, posts, S) {
     const ps = posts.filter((p) => p.category === "ব্যক্তিগত"), by = {}; ps.forEach((p) => (by[p.date.slice(0, 4)] ||= []).push(p));
-    return head("memories", "Memories", "Personal pieces arranged by year: school days, college, BUET, and the stretches in between.") + wrap(Object.keys(by).sort().reverse().map((y) => `<h2 class="year rv">${y}</h2><ul class="grid g3 plist">${postCards(by[y])}</ul>`).join("") || '<p class="empty">Nothing published here yet.</p>');
+    return head("memories", "Memories", copy(S, "memories")) + wrap(Object.keys(by).sort().reverse().map((y) => `<h2 class="year rv">${y}</h2><ul class="grid g3 plist">${postCards(by[y])}</ul>`).join("") || '<p class="empty">Nothing published here yet.</p>');
   },
   404() { return `<div class="wrap err"><h1>Page not found</h1><p>This address doesn’t exist. Try the <a href="${R}index.html">home page</a> or the <a href="${R}blogs/">writing archive</a>.</p></div>`; }
 };

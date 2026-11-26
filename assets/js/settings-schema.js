@@ -69,6 +69,8 @@
   var SECTION_KEYS = ["explore", "latest", "projects", "moments"];
   var PATTERNS = ["grid", "dots", "lines", "none"];
   var TONES = ["info", "success", "warning", "celebrate"];
+  // Page text the admin can override (blank = the built-in wording). Plain text only; the page escapes it.
+  var COPY_KEYS = ["journey", "skills", "projects", "achievements", "gallery", "writing", "memories", "moments", "explore", "latest", "projectsHome", "momentsHome"];
   var DEFAULT_NAV = [
     { label: "Home", href: "index.html", visible: true }, { label: "About", href: "about.html", visible: true },
     { label: "Journey", href: "journey.html", visible: true }, { label: "Skills", href: "skills.html", visible: true },
@@ -81,7 +83,7 @@
     preset: "journal", accent: "", mode: "auto",
     headingFont: "Bricolage Grotesque", bodyFont: "IBM Plex Sans", bnFont: "Anek Bangla",
     fontScale: 1, width: 1120, card: "outlined", density: "comfortable", animations: true, hero: "split",
-    pattern: "grid", heroPhoto: true, heroRole: "",
+    pattern: "grid", heroPhoto: true, heroRole: "", copy: {},
     announcement: { enabled: false, text: "", link: "", linkLabel: "", tone: "info", until: "" },
     sections: SECTION_KEYS.map(function (k) { return { key: k, visible: true }; }),
     nav: DEFAULT_NAV.map(function (n) { return { label: n.label, href: n.href, visible: n.visible }; }),
@@ -126,6 +128,8 @@
     c.pattern = oneOf(raw.pattern, PATTERNS, d.pattern);
     c.heroPhoto = !(raw.heroPhoto === false || raw.heroPhoto === "false");
     c.heroRole = str(raw.heroRole, 160);
+    var cp = raw.copy && typeof raw.copy === "object" ? raw.copy : {}; c.copy = {};
+    COPY_KEYS.forEach(function (k) { var v = str(cp[k], 300); if (v) c.copy[k] = v; });
     var an = raw.announcement && typeof raw.announcement === "object" ? raw.announcement : {};
     c.announcement = { enabled: an.enabled === true || an.enabled === "true", text: str(an.text, 220), link: safeUrl(an.link, true),
       linkLabel: str(an.linkLabel, 40), tone: oneOf(an.tone, TONES, "info"), until: /^\d{4}-\d{2}-\d{2}$/.test(str(an.until, 10)) ? str(an.until, 10) : "" };
@@ -219,7 +223,7 @@
   }
 
   var api = { FONTS: FONTS, PRESETS: PRESETS, CARDS: CARDS, DENSITY: DENSITY, HEROES: HEROES, MODES: MODES,
-    SECTION_KEYS: SECTION_KEYS, PATTERNS: PATTERNS, TONES: TONES, DEFAULTS: DEFAULTS, validate: validate, safeUrl: safeUrl, ratio: ratio,
+    SECTION_KEYS: SECTION_KEYS, COPY_KEYS: COPY_KEYS, PATTERNS: PATTERNS, TONES: TONES, DEFAULTS: DEFAULTS, validate: validate, safeUrl: safeUrl, ratio: ratio,
     contrastReport: contrastReport, toCssVars: toCssVars, toAttrs: toAttrs, googleFontsHref: googleFontsHref };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   root.SiteSettings = api;

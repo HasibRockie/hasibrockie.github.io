@@ -1,7 +1,7 @@
 // moments.js - public photo collection. Views: grid (masonry), timeline (by year), story (slideshow).
 // Search, year/place filters, sort, lightbox, and shareable links (#m-<id>). Rows are cached on this device for an instant repaint.
-import { openLightbox } from "./lightbox.js?v=202611261801";
-import { head, esc, fmt, imageURL, ICON } from "./render.js?v=202611261801";
+import { openLightbox } from "./lightbox.js?v=202611270222";
+import { head, esc, fmt, imageURL, ICON, copy } from "./render.js?v=202611270222";
 const cfg = window.SITE_CONFIG || {};
 const on = /^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(cfg.SUPABASE_URL || "") && !!cfg.SUPABASE_ANON_KEY && !/YOUR-/.test(cfg.SUPABASE_ANON_KEY);
 const KEY = "sc:v1:moments", FRESH = 120000;
@@ -24,7 +24,7 @@ export async function loadMoments(cb) {
 
 export function mountMoments(main) {
   const st = { rows: [], q: "", year: "", place: "", sort: "new", view: (() => { try { return localStorage.getItem("sc:v1:mview") || "grid"; } catch (_) { return "grid"; } })(), timer: null, story: 0 };
-  main.innerHTML = head("moments", "Moments", "Little pieces of time, kept in one place: travels, campus days, family and the ordinary afternoons worth remembering.") +
+  main.innerHTML = head("moments", "Moments", copy(window.SiteBoot && window.SiteBoot.current(), "moments")) +
     `<div class="wrap" id="mroot"><div class="skl">${'<div class="skel sq"></div>'.repeat(8)}</div></div>`;
   const root = document.getElementById("mroot");
 
