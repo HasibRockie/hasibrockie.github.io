@@ -52,8 +52,8 @@
   },
   "card": "raised",
   "hero": "centered",
-  "mode": "dark",
-  "width": 1200,
+  "mode": "auto",
+  "width": 1260,
   "accent": "#ed7750",
   "bnFont": "Noto Serif Bengali",
   "preset": "midnight",
@@ -89,7 +89,7 @@
       "visible": true
     }
   ],
-  "fontScale": 0.9,
+  "fontScale": 1.13,
   "siteTitle": "HasibMania",
   "animations": true,
   "footerText": "hasibrockie.github.io",
