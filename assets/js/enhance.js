@@ -1,6 +1,6 @@
 // enhance.js - progressive touches after each render: scroll reveal, sticky-header shadow, back-to-top, reading progress,
 // share buttons, gallery lightbox, contact form. Everything degrades to plain content without it.
-import { openLightbox } from "./lightbox.js?v=202611261734";
+import { openLightbox } from "./lightbox.js?v=202611261801";
 const cfg = window.SITE_CONFIG || {};
 const apiOn = /^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(cfg.SUPABASE_URL || "") && !!cfg.SUPABASE_ANON_KEY;
 let io = null, scrollBound = false;
@@ -62,4 +62,31 @@ export function wireContact() {
     } catch (_) { say("Couldn’t reach the server. Check your connection and try again."); }
     finally { btn.disabled = false; }
   });
+}
+
+/** Journey: Everything / Education / Career filter, and a timeline line that fills as you scroll. */
+export function wireJourney() {
+  const seg = document.querySelector(".jf"), tl = document.querySelector(".tl"); if (!seg || !tl) return;
+  seg.onclick = (e) => { const b = e.target.closest("button[data-f]"); if (!b) return;
+    seg.querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+    tl.querySelectorAll(":scope > li").forEach((li) => { li.hidden = !!b.dataset.f && li.dataset.k !== b.dataset.f; if (!li.hidden) li.classList.add("in"); }); fill(); };
+  const fill = () => { const r = tl.getBoundingClientRect(), mid = window.innerHeight * 0.6; tl.style.setProperty("--fill", String(Math.max(0, Math.min(1, (mid - r.top) / Math.max(1, r.height))))); };
+  if (!tl.dataset.bound) { tl.dataset.bound = "1"; window.addEventListener("scroll", () => requestAnimationFrame(fill), { passive: true }); window.addEventListener("resize", fill); }
+  fill();
+}
+
+/** Projects: filter cards by tool (chips built from the tools actually used). */
+export function wireProjects() {
+  const box = document.getElementById("pf"), cards = [...document.querySelectorAll(".proj[data-tools]")]; if (!box || !cards.length) return;
+  const key = (t) => t.trim().toLowerCase(), count = {}, label = {};                       // "Django" and "DJango" are one tool
+  cards.forEach((c) => { c.dataset.k = c.dataset.tools.split("|").map(key).join("|"); new Set(c.dataset.tools.split("|").filter(Boolean)).forEach((t) => { const k = key(t); count[k] = (count[k] || 0) + 1; if (!label[k] || /[a-z]/.test(t[0]) === false) label[k] = label[k] || t; }); });
+  const tools = Object.keys(count).sort((a, b) => count[b] - count[a] || a.localeCompare(b)).slice(0, 10);
+  if (!tools.length) { box.remove(); return; }
+  box.innerHTML = "";
+  const mk = (label, val) => { const b = document.createElement("button"); b.type = "button"; b.dataset.t = val; b.textContent = label; b.setAttribute("aria-pressed", String(val === "")); box.append(b); };
+  mk("All projects", ""); tools.forEach((t) => mk(`${label[t]} (${count[t]})`, t));
+  box.onclick = (e) => { const b = e.target.closest("button[data-t]"); if (!b) return;
+    box.querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+    cards.forEach((c) => { c.hidden = !!b.dataset.t && !c.dataset.k.split("|").includes(b.dataset.t); if (!c.hidden) c.classList.add("in"); });
+    document.querySelectorAll(".gap, .section-head").forEach((h) => { const grid = h.closest(".gap") ? h.closest(".gap").nextElementSibling : h.nextElementSibling; if (grid && grid.classList.contains("grid")) { const any = [...grid.children].some((c) => !c.hidden); (h.closest(".gap") || h).hidden = !any; grid.hidden = !any; } }); };
 }

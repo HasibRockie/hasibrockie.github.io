@@ -50,7 +50,7 @@ function solve(g, n, gates) {   // BFS shortest path start -> goal; gates (if gi
 
 export function mountMaze(root) {
   const st = { lvl: "easy", seed: 0, n: 8, g: null, px: 0, py: 0, ax: 0, ay: 0, gates: new Map(), seen: new Set(), moves: 0, t0: 0, tEnd: 0, pen: 0, riddles: [], fog: false, busy: false, won: false, anim: 0 };
-  root.innerHTML = `<section class="lab-hero"><div class="pattern" aria-hidden="true"></div><div class="wrap"><p class="sheet">Unlisted sheet · Sheet ∞</p><h1>The Labyrinth</h1>
+  root.innerHTML = `<section class="lab-hero"><div class="pattern" aria-hidden="true"></div><div class="wrap"><p class="sheet">Hidden page</p><h1>The Labyrinth</h1>
 <p class="lead">Somewhere in this maze is the core. Gates along the true path stay sealed until you answer a riddle about Hasib and this website. The answers are hidden in plain sight on the other pages.</p></div></section>
 <div class="wrap lab"><div class="lab-bar"><div class="mview" role="group" aria-label="Difficulty">${Object.entries(LEVELS).map(([k, v]) => `<button type="button" data-l="${k}" aria-pressed="${k === "easy"}">${v.label}</button>`).join("")}</div>
 <label class="lab-fog"><input type="checkbox" id="fog"> Fog of war</label><button class="btn sm ghost" type="button" id="new">New maze</button></div>
@@ -158,7 +158,7 @@ export function mountMaze(root) {
 <div class="cta"><button class="btn" type="button" id="again">Play again</button>${st.lvl !== "hard" ? '<button class="btn ghost" type="button" id="harder">Try harder</button>' : ""}<button class="btn ghost" type="button" id="copyr">Copy result</button></div></div>`;
     $("again").onclick = () => newGame(); if ($("harder")) $("harder").onclick = () => setLevel(st.lvl === "easy" ? "medium" : "hard");
     $("copyr").onclick = async () => { try { await navigator.clipboard.writeText(`I solved The Labyrinth (${LEVELS[st.lvl].label}) in ${fmtT(t)} with ${st.moves} moves. ${location.href}`); $("copyr").textContent = "Copied ✓"; } catch (_) {} };
-    import("./track.js?v=202611261734").then((m) => m.trackView("mazewin")).catch(() => {});
+    import("./track.js?v=202611261801").then((m) => m.trackView("mazewin")).catch(() => {});
     $("again").focus();
   }
   function setLevel(l) { st.lvl = l; $("fog").checked = LEVELS[l].fog; root.querySelectorAll("[data-l]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.l === l))); clearInterval(timer); newGame(); }
