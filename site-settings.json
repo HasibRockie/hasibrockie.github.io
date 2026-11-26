@@ -44,11 +44,16 @@
       "href": "gallery.html",
       "label": "Gallery",
       "visible": true
+    },
+    {
+      "href": "moments/",
+      "label": "Moments",
+      "visible": true
     }
   ],
   "seo": {
     "ogImage": "https://dfrlugnqaekgerfhtjra.supabase.co/storage/v1/object/public/site-media/seo/2026/44dd5587-78c3-4e95-a4f0-cd132cb79431.webp",
-    "description": ""
+    "description": "Md Hasibul Islam (Hasib): A mechanical engineer graduated from BUET and BCS Administration (recommended) at 47th BCS. Researcher in fluid and thermal engineering, web developer, and educator."
   },
   "card": "raised",
   "hero": "centered",
@@ -77,6 +82,7 @@
   ],
   "density": "comfortable",
   "favicon": "",
+  "pattern": "grid",
   "tagline": "But, I've promises to keep, And miles to go before I sleep.",
   "bodyFont": "Bricolage Grotesque",
   "sections": [
@@ -87,11 +93,28 @@
     {
       "key": "latest",
       "visible": true
+    },
+    {
+      "key": "projects",
+      "visible": true
+    },
+    {
+      "key": "moments",
+      "visible": true
     }
   ],
   "fontScale": 1.13,
+  "heroPhoto": true,
   "siteTitle": "HasibMania",
   "animations": true,
   "footerText": "hasibrockie.github.io",
-  "headingFont": "Newsreader"
+  "headingFont": "Newsreader",
+  "announcement": {
+    "link": "",
+    "text": "",
+    "tone": "info",
+    "until": "",
+    "enabled": false,
+    "linkLabel": ""
+  }
 }

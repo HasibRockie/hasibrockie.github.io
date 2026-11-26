@@ -81,7 +81,7 @@
     preset: "journal", accent: "", mode: "auto",
     headingFont: "Bricolage Grotesque", bodyFont: "IBM Plex Sans", bnFont: "Anek Bangla",
     fontScale: 1, width: 1120, card: "outlined", density: "comfortable", animations: true, hero: "split",
-    pattern: "grid", heroPhoto: true,
+    pattern: "grid", heroPhoto: true, heroRole: "",
     announcement: { enabled: false, text: "", link: "", linkLabel: "", tone: "info", until: "" },
     sections: SECTION_KEYS.map(function (k) { return { key: k, visible: true }; }),
     nav: DEFAULT_NAV.map(function (n) { return { label: n.label, href: n.href, visible: n.visible }; }),
@@ -112,6 +112,7 @@
     c.preset = oneOf(raw.preset, Object.keys(PRESETS), d.preset);
     c.accent = hex(raw.accent);
     if (raw.accent && !c.accent) w.push("Accent colour must look like #1d4fa3; ignored.");
+    if (c.accent && ratio(c.accent, PRESETS[oneOf(raw.preset, Object.keys(PRESETS), d.preset)].light.bg) < 4.5) w.push("This accent is too light to read on the light theme, so a slightly darker shade of it is used automatically for links and buttons.");
     c.mode = oneOf(raw.mode, MODES, d.mode);
     c.headingFont = oneOf(raw.headingFont, Object.keys(FONTS), d.headingFont);
     c.bodyFont = oneOf(raw.bodyFont, Object.keys(FONTS), d.bodyFont);
@@ -124,6 +125,7 @@
     c.hero = oneOf(raw.hero, HEROES, d.hero);
     c.pattern = oneOf(raw.pattern, PATTERNS, d.pattern);
     c.heroPhoto = !(raw.heroPhoto === false || raw.heroPhoto === "false");
+    c.heroRole = str(raw.heroRole, 160);
     var an = raw.announcement && typeof raw.announcement === "object" ? raw.announcement : {};
     c.announcement = { enabled: an.enabled === true || an.enabled === "true", text: str(an.text, 220), link: safeUrl(an.link, true),
       linkLabel: str(an.linkLabel, 40), tone: oneOf(an.tone, TONES, "info"), until: /^\d{4}-\d{2}-\d{2}$/.test(str(an.until, 10)) ? str(an.until, 10) : "" };
@@ -166,9 +168,20 @@
   function ratio(a, b) { var x = lum(a), y = lum(b); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); }
   function bestText(bg) { return ratio("#ffffff", bg) >= ratio("#0b0b0b", bg) ? "#ffffff" : "#0b0b0b"; }
 
+  // Mix a colour toward black (dir < 0) or white (dir > 0) by 6% per step.
+  function shade(h, dir) {
+    var n = parseInt(h.slice(1), 16), t = dir > 0 ? 255 : 0;
+    var c = [(n >> 16) & 255, (n >> 8) & 255, n & 255].map(function (v) { return Math.round(v + (t - v) * 0.06); });
+    return "#" + c.map(function (v) { return ("0" + v.toString(16)).slice(-2); }).join("");
+  }
   function palette(clean, scheme) {
     var p = Object.assign({}, PRESETS[clean.preset][scheme]);
-    if (clean.accent) { p.accent = clean.accent; p.onAccent = bestText(clean.accent); }
+    if (clean.accent) {
+      p.accent = clean.accent;
+      // A custom accent must stay readable as link text: nudge it darker (light theme) or lighter (dark theme) until it passes AA.
+      for (var i = 0; i < 40 && ratio(p.accent, p.bg) < 4.5; i++) p.accent = shade(p.accent, scheme === "dark" ? 1 : -1);
+      p.onAccent = bestText(p.accent);
+    }
     return p;
   }
   function contrastReport(clean) {

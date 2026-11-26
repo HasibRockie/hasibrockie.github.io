@@ -1,13 +1,14 @@
 // app.js - entry point. Paints a skeleton at once, then renders cache -> API -> (snapshot if the API is slow/down).
-import { loadBundle, loadPost } from "./data.js?v=202611261701";
-import { initSettings, applySeo } from "./theme.js?v=202611261701";
-import * as V from "./render.js?v=202611261701";
-import { trackView } from "./track.js?v=202611261701";
-import { reveal, bindScroll, wireShare, wireGallery, wireContact } from "./enhance.js?v=202611261701";
+import { loadBundle, loadPost } from "./data.js?v=202611261734";
+import { initSettings, applySeo } from "./theme.js?v=202611261734";
+import * as V from "./render.js?v=202611261734";
+import { trackView } from "./track.js?v=202611261734";
+import { reveal, bindScroll, wireShare, wireGallery, wireContact } from "./enhance.js?v=202611261734";
 
 const P = document.body.dataset.page, R = document.body.dataset.root || "", main = document.getElementById("main");
+{ const m = P === "404" && /^\/post\/(\d+)\/?$/.exec(window.location.pathname); if (m) window.location.replace(`/post/?id=${m[1]}`); }   // brand-new post: static page not generated yet
 let S = (window.SiteBoot && window.SiteBoot.current()) || window.SiteSettings.validate({}).clean;
-let bundle = null, meta = null, post = null, postMeta = null, momentsMounted = false, chromeSig = "";
+let bundle = null, meta = null, post = null, postMeta = null, momentsMounted = false, chromeSig = "", lastHtml = "";
 const wstate = { q: "", c: "" };
 
 document.addEventListener("error", (e) => { const t = e.target; if (t && t.tagName === "IMG" && t.hasAttribute("data-hide")) t.remove(); }, true);   // CSP-safe replacement for inline onerror
@@ -27,15 +28,17 @@ async function renderPostPage() {
 function renderPage() {
   renderChrome(); applySeo(S, P);
   if (OWN) return;
-  if (P === "moments") { if (!momentsMounted) { momentsMounted = true; import("./moments.js?v=202611261701").then((m) => { m.mountMoments(main); reveal(main); }); } return; }
+  if (P === "moments") { if (!momentsMounted) { momentsMounted = true; import("./moments.js?v=202611261734").then((m) => { m.mountMoments(main); reveal(main); }); } return; }
   if (P === "post") return renderPostPage();
   if (!bundle) return;
   const fn = V.pages[P]; if (!fn) return;
-  main.innerHTML = V.notice(meta) + fn(bundle.data, bundle.posts, S);
+  const html = V.notice(meta) + fn(bundle.data, bundle.posts, S);
+  if (html === lastHtml) return;                        // cache -> API with identical content: don't redraw (no flicker, keeps scroll/inputs)
+  lastHtml = html; main.innerHTML = html;
   if (P === "writing") V.wireWriting(bundle.posts, wstate);
   if (P === "gallery") wireGallery(bundle.data.photos || [], V.imageURL);
   if (P === "about") wireContact();
-  if (P === "home" && S.sections.some((x) => x.key === "moments" && x.visible)) import("./moments.js?v=202611261701").then((m) => m.fillHomeStrip(R)).catch(() => {});
+  if (P === "home" && S.sections.some((x) => x.key === "moments" && x.visible)) import("./moments.js?v=202611261734").then((m) => m.fillHomeStrip(R)).catch(() => {});
   reveal(main);
 }
 
@@ -45,7 +48,7 @@ initSettings((clean) => { S = clean; renderPage(); });
 if (OWN) {
   renderChrome();
   loadBundle("404", (b) => { if (b) { bundle = b; renderChrome(); } });
-  import("./maze.js?v=202611261701").then((m) => m.mountMaze(main));
+  import("./maze.js?v=202611261734").then((m) => m.mountMaze(main));
 } else if (P === "404") {                                   // static message stays; we only add header/footer
   renderChrome();
   loadBundle("404", (b) => { if (b) { bundle = b; renderChrome(); } });
@@ -55,7 +58,7 @@ if (OWN) {
     bundle = b; meta = m; renderPage();
   });
   if (P === "post") {
-    const id = new URLSearchParams(window.location.search).get("id");
+    const id = new URLSearchParams(window.location.search).get("id") || document.body.dataset.postId;
     if (!/^\d+$/.test(id || "")) { postMeta = { notFound: true }; renderPage(); }
     else loadPost(id, (p, m) => { post = p; postMeta = m; if (p) trackView("post", id); if (!p && !m.notFound && !bundle) { main.innerHTML = V.errorState(); return; } renderPage(); });
   }

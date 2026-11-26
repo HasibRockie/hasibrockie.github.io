@@ -116,6 +116,10 @@ h1,h2,.lead,.phead .lead{text-wrap:balance}
 .hero h1{margin-bottom:var(--s2)}
 .hero h1 .hl{background:linear-gradient(90deg,var(--accent),color-mix(in srgb,var(--signal) 80%,var(--accent)));-webkit-background-clip:text;background-clip:text;color:transparent}
 .hero .lead{font-size:clamp(1.1rem,2vw,1.3rem);max-width:38ch;color:var(--muted)}
+.hero .lead.role{color:var(--text);font-weight:500;max-width:46ch}
+.hero .quote{margin-top:var(--s2);max-width:44ch;color:var(--muted);font-style:italic;padding-left:.9rem;border-left:3px solid var(--signal)}
+.hero[data-layout=centered] .quote{margin-inline:auto;border-left:0;padding-left:0}
+.hero[data-layout=centered] .quote::before{content:"“"}.hero[data-layout=centered] .quote::after{content:"”"}
 .hero .traits{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:var(--s3);list-style:none;padding:0}
 .hero .traits li{font:500 .8rem/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;padding:.5rem .75rem;border:1px solid var(--border);border-radius:999px;background:color-mix(in srgb,var(--surface) 80%,transparent)}
 .hero .traits li::before{content:"▸ ";color:var(--signal)}

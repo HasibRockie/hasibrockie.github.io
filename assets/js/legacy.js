@@ -34,5 +34,6 @@ export function normPost(p) {
   else for (let k = 1; k <= 10; k++) if (p["img" + k]) media.push({ slot: k, path: p["img" + k], caption: p[`img${k}caption`] || "" });
   const fmt = (p.extra && p.extra.format) || p.format || "plain";
   return { id: p.id, date: p.date, category: p.category, title: p.title, author: p.author, media,
-    paragraphs: bodyParas(p).filter((s) => String(s).trim()), format: fmt === "md" ? "md" : "plain" };
+    paragraphs: bodyParas(p).filter((s) => String(s).trim()), format: fmt === "md" ? "md" : "plain",
+    seoDescription: String((p.extra && p.extra.seoDescription) || p.seoDescription || ""), coverAlt: String((p.extra && p.extra.coverAlt) || p.coverAlt || "") };
 }

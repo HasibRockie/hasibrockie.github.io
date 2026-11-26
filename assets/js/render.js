@@ -1,5 +1,5 @@
 // render.js - header/footer and every page. All dynamic text goes through esc(); Markdown goes through the sanitiser in md.js.
-import { renderMd } from "./md.js?v=202611261701";
+import { renderMd } from "./md.js?v=202611261734";
 const B = document.body, R = B.dataset.root || "", P = B.dataset.page;
 export const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 export const imageURL = (src) => (/^https:\/\//i.test(src) ? src : /^(?:[a-z][a-z0-9+.-]*:|\/\/)/i.test(src) ? "" : R + src);
@@ -76,7 +76,7 @@ export const head = (page, t, p, extra = "") => `<section class="phead"><div cla
 const wrap = (h) => `<div class="wrap">${h}</div>`;
 const sec = (n, t, sub, more) => `<div class="section-head rv"><div><h2><span class="sec">§ ${String(n).padStart(2, "0")}</span>${esc(t)}</h2>${sub ? `<p>${esc(sub)}</p>` : ""}</div>${more || ""}</div>`;
 const thumbOf = (p) => (p.cover && /^https:\/\//i.test(p.cover) ? p.cover : `assets/imgs/fiction/post${p.id}.png`);
-export const postCards = (ps) => ps.map((p) => `<li class="rv"><a class="card pcard" href="${R}post/?id=${p.id}"><div class="media">${im(thumbOf(p), "")}<span class="tag">${esc(CAT[p.category] || p.category)}</span></div><div class="body"><h3 lang="bn">${esc(p.title)}</h3>${p.excerpt ? `<p lang="bn">${esc(p.excerpt)}</p>` : ""}<div class="foot"><time datetime="${esc(p.date)}">${esc(fmt(p.date))}</time>${p.words ? `<span>${readMin(p.words)} min read</span>` : ""}</div></div></a></li>`).join("");
+export const postCards = (ps) => ps.map((p) => `<li class="rv"><a class="card pcard" href="${R}post/${p.id}/"><div class="media">${im(thumbOf(p), "")}<span class="tag">${esc(CAT[p.category] || p.category)}</span></div><div class="body"><h3 lang="bn">${esc(p.title)}</h3>${p.excerpt ? `<p lang="bn">${esc(p.excerpt)}</p>` : ""}<div class="foot"><time datetime="${esc(p.date)}">${esc(fmt(p.date))}</time>${p.words ? `<span>${readMin(p.words)} min read</span>` : ""}</div></div></a></li>`).join("");
 const projCard = (p, i) => `<article class="card proj hov rv"><div class="media">${im(p.img, p.title)}</div><div class="body"><p class="meta">${esc(p.meta)}</p><h3>${esc(p.title)}</h3><p>${esc(p.text)}</p>${(p.people || []).map((x) => `<p class="people"><b>${esc(x[0])}:</b> ${esc(x[1])}</p>`).join("")}${p.tools && p.tools.length ? `<ul class="chips">${p.tools.map((t) => `<li>${esc(t)}</li>`).join("")}</ul>` : ""}${(p.links || []).length ? `<div class="links">${p.links.map(link).join("")}</div>` : ""}</div></article>`;
 const traits = (q) => String(q || "").split("|").map((x) => x.trim()).filter(Boolean);
 
@@ -84,12 +84,13 @@ const traits = (q) => String(q || "").split("|").map((x) => x.trim()).filter(Boo
 export const pages = {
   home(d, posts, S) {
     const s = d.site || {}, tb = d.titleblock || [], hero = S.hero, photo = S.heroPhoto && d.about && d.about.photo;
-    const title = S.siteTitle || s.name || "", tr = traits(s.quote);
+    const brand = S.siteTitle || s.name || "", nameRow = tb.find((r) => /^name$/i.test(String(r[0]).trim())), title = (nameRow && nameRow[1]) || brand, tr = traits(s.quote);
+    const role = S.heroRole || "", quote = S.tagline || s.tagline || "";
     const card = hero === "minimal" ? "" : (tb.length || photo) ? `<aside class="hero-card${photo ? "" : " nophoto"}">${photo ? `<div class="photo">${im(d.about.photo, "Portrait of " + (tb[0] && tb[0][1] || title))}<span class="stamp">Rev. ${new Date().getFullYear()} · Approved</span></div>` : ""}${tb.length ? `<table class="tb"><caption class="visually-hidden">At a glance</caption><tbody>${tb.map((r) => `<tr><th scope="row">${esc(r[0])}</th><td>${esc(r[1])}</td></tr>`).join("")}</tbody></table>` : ""}</aside>` : "";
     const nProj = (d.projects || []).length + (d.other_projects || []).length, nAch = (d.achievements || []).length, years = new Set(posts.map((p) => String(p.date).slice(0, 4))).size;
     const stats = [[posts.length, "Stories & essays"], [nProj, "Projects"], [nAch, "Achievements"], [years, "Years of writing"]].filter((x) => x[0] > 0);
-    const heroHtml = `<section class="hero" data-layout="${esc(hero)}"><div class="pattern" aria-hidden="true"></div><div class="wrap"><div class="hero-grid"><div class="hero-main"><p class="sheet">${esc(sheetNo("home"))}</p><h1><span class="hl">${esc(title)}</span></h1><p class="lead">${esc(S.tagline || s.tagline)}</p>
-<div class="cta"><a class="btn" href="${R}journey.html">See my journey <span class="arrow">→</span></a>${s.resume ? `<a class="btn ghost" href="${esc(s.resume)}" target="_blank" rel="noopener">Résumé</a>` : ""}</div>${tr.length ? `<ul class="traits" aria-label="In a few words">${tr.map((t) => `<li>${esc(t)}</li>`).join("")}</ul>` : ""}</div>${card}</div>
+    const heroHtml = `<section class="hero" data-layout="${esc(hero)}"><div class="pattern" aria-hidden="true"></div><div class="wrap"><div class="hero-grid"><div class="hero-main"><p class="sheet">${esc(brand && brand !== title ? brand : sheetNo("home"))}</p><h1><span class="hl">${esc(title)}</span></h1>${role ? `<p class="lead role">${esc(role)}</p>` : ""}${quote ? `<p class="${role ? "quote" : "lead"}">${esc(quote)}</p>` : ""}
+<div class="cta"><a class="btn" href="${R}projects.html">See my work <span class="arrow">→</span></a><a class="btn ghost" href="${R}blogs/">Read my stories</a>${s.resume ? `<a class="btn ghost" href="${esc(s.resume)}" target="_blank" rel="noopener">Résumé</a>` : ""}</div>${tr.length ? `<ul class="traits" aria-label="In a few words">${tr.map((t) => `<li>${esc(t)}</li>`).join("")}</ul>` : ""}</div>${card}</div>
 ${stats.length >= 2 ? `<div class="stats rv">${stats.map(([n, l]) => `<div><b>${n}</b><span>${esc(l)}</span></div>`).join("")}</div>` : ""}</div></section>`;
     let n = 0;
     const secs = S.sections.filter((x) => x.visible).map((x) => {
@@ -106,7 +107,8 @@ ${stats.length >= 2 ? `<div class="stats rv">${stats.map(([n, l]) => `<div><b>${
     const s = d.site || {};
     const facts = [...(a.facts || []).map((f) => [f[0], esc(f[1])]), ...(s.email ? [["Email", `<a href="mailto:${esc(s.email)}">${esc(s.email)}</a>`]] : []), ...(s.social || []).filter((l) => /LinkedIn|Scholar|GitHub/.test(l.label)).map((l) => [l.label, link({ label: "Open profile ↗", url: l.url })])];
     return head("about", "About", esc(a.intro)) + wrap(`<div class="split"><div class="portrait rv">${im(a.photo, "Portrait of " + (s.name || "the author"))}<p class="cap">Fig. 1 · ${esc(s.name || "")}</p></div><div><div class="prose rv">${(a.paragraphs || []).map((p) => `<p>${esc(p)}</p>`).join("")}</div>
-<dl class="facts">${facts.map((f) => `<div class="rv"><dt>${esc(f[0])}</dt><dd>${f[1]}</dd></div>`).join("")}</dl></div></div>${contactForm()}`);
+<dl class="facts">${facts.map((f) => `<div class="rv"><dt>${esc(f[0])}</dt><dd>${f[1]}</dd></div>`).join("")}</dl></div></div>
+<section class="section more">${sec(1, "More about me")}<ul class="grid g3 plist">${[["skills.html", "Skills", "Languages, software and tools I work with."], ["achievements.html", "Achievements", "Awards, leadership and training."], ["memories/", "Memories", "Personal posts from school, college and BUET."]].map(([u, t, d]) => `<li class="rv"><a class="card" href="${R}${u}"><span class="go">${ICON.arrow}</span><div class="body"><h3>${t}</h3><p>${d}</p></div></a></li>`).join("")}</ul></section>${contactForm()}`);
   },
   journey(d) {
     const t = d.timeline || [];
@@ -131,7 +133,7 @@ ${stats.length >= 2 ? `<div class="stats rv">${stats.map(([n, l]) => `<div><b>${
   },
   writing(d, posts) {
     const cats = [...new Set(posts.map((p) => p.category))];
-    return head("writing", "Writing", "Fiction, essays and personal reflections, mostly in Bangla.") + wrap(`<div class="tools"><input id="q" type="search" placeholder="Search titles and excerpts" aria-label="Search posts"><ul class="seg" id="cats"><li><button aria-pressed="true" data-c="">All</button></li>${cats.map((c) => `<li><button aria-pressed="false" data-c="${esc(c)}">${CAT[c] || esc(c)}</button></li>`).join("")}</ul></div><p class="small muted" id="n" aria-live="polite"></p><ul class="grid g3 plist" id="list"></ul>`);
+    return head("writing", "Writing", "Fiction, essays and personal reflections, mostly in Bangla.") + wrap(`<div class="tools"><input id="q" type="search" placeholder="Search titles and excerpts" aria-label="Search posts"><ul class="seg" id="cats"><li><button aria-pressed="true" data-c="">All</button></li>${cats.map((c) => `<li><button aria-pressed="false" data-c="${esc(c)}">${CAT[c] || esc(c)}</button></li>`).join("")}</ul></div><p class="small muted" id="n" aria-live="polite"></p><ul class="grid g3 plist" id="list"></ul><p class="after"><a class="link-arrow" href="${R}memories/">Personal memories, year by year</a></p>`);
   },
   memories(d, posts) {
     const ps = posts.filter((p) => p.category === "ব্যক্তিগত"), by = {}; ps.forEach((p) => (by[p.date.slice(0, 4)] ||= []).push(p));
@@ -166,16 +168,16 @@ export async function postPage(p, all) {
   const coverSrc = cover && /^https:\/\//i.test(cover.path) ? cover.path : `assets/imgs/fiction/post${p.id}.png`;
   const figs = p.media.filter((m) => m.slot >= 2).map((m) => `<figure>${im(/^https:\/\//i.test(m.path) ? m.path : "assets/imgs/fiction/" + m.path.split("/").pop(), m.caption || p.title)}${m.caption ? `<figcaption>${esc(m.caption)}</figcaption>` : ""}</figure>`).join("");
   const body = p.format === "md" ? '<div class="md" id="mdbody"></div>' : p.paragraphs.map((t) => t.split(/\r?\n+/).map((x) => x.trim()).filter(Boolean).map((x) => `<p>${esc(x)}</p>`).join("")).join("");
-  const html = `<div class="progress" id="progress" aria-hidden="true"></div><div class="wrap"><article class="article" lang="bn"><a class="back" href="${R}blogs/" lang="en">← All writing</a><h1>${esc(p.title)}</h1><p class="meta" lang="en"><span class="tag">${CAT[p.category] || esc(p.category)}</span><span class="tag sig">${readMin(words)} min read</span><span class="muted small"><abbr title="Date published">REV</abbr> ${esc(fmt(p.date))}${p.author ? " · " + esc(p.author) : ""}</span></p>${im(coverSrc, (cover && cover.caption) || p.title, null, null, "cover")}<div class="body">${body}</div>${figs}
+  const html = `<div class="progress" id="progress" aria-hidden="true"></div><div class="wrap"><article class="article" lang="bn"><a class="back" href="${R}blogs/" lang="en">← All writing</a><h1>${esc(p.title)}</h1><p class="meta" lang="en"><span class="tag">${CAT[p.category] || esc(p.category)}</span><span class="tag sig">${readMin(words)} min read</span><span class="muted small"><abbr title="Date published">REV</abbr> ${esc(fmt(p.date))}${p.author ? " · " + esc(p.author) : ""}</span></p>${im(coverSrc, p.coverAlt || (cover && cover.caption) || p.title, null, null, "cover")}<div class="body">${body}</div>${figs}
 <div class="share" lang="en"><span>Share</span><button class="btn sm ghost" type="button" id="share">Share this post</button><button class="btn sm ghost" type="button" id="copy">Copy link</button></div>
-<nav class="pn" aria-label="More posts" lang="en">${pv ? `<a href="${R}post/?id=${pv.id}"><small>← Older</small><b lang="bn">${esc(pv.title)}</b></a>` : ""}${nx ? `<a class="next" href="${R}post/?id=${nx.id}"><small>Newer →</small><b lang="bn">${esc(nx.title)}</b></a>` : ""}</nav></article></div>`;
+<nav class="pn" aria-label="More posts" lang="en">${pv ? `<a href="${R}post/${pv.id}/"><small>← Older</small><b lang="bn">${esc(pv.title)}</b></a>` : ""}${nx ? `<a class="next" href="${R}post/${nx.id}/"><small>Newer →</small><b lang="bn">${esc(nx.title)}</b></a>` : ""}</nav></article></div>`;
   return { html, words, coverSrc, async after() { if (p.format === "md") { const el = document.getElementById("mdbody"); if (el) { try { el.innerHTML = await renderMd(p.paragraphs.join("\n\n")); } catch (e) { el.textContent = p.paragraphs.join("\n\n"); } } } } };
 }
 export function postSeo(p, info) {
   document.title = `${p.title} | Md Hasibul Islam`;
-  const desc = (p.paragraphs.find((t) => t.trim().length > 80 && !/^[\[(]/.test(t.trim())) || "").trim().replace(/[#*_`>\[\]]/g, "").slice(0, 160);
+  const desc = (p.seoDescription || p.paragraphs.find((t) => t.trim().length > 80 && !/^[\[(]/.test(t.trim())) || "").trim().replace(/[#*_`>\[\]]/g, "").slice(0, 160);
   const set = (sel, attr, v) => { const el = document.querySelector(sel); if (el && v) el.setAttribute(attr, v); };
-  const url = `${window.location.origin}/post/?id=${p.id}`, img = new URL(info.coverSrc, window.location.origin + "/").href;
+  const url = `${window.location.origin}/post/${p.id}/`, img = new URL(info.coverSrc, window.location.origin + "/").href;
   set('link[rel="canonical"]', "href", url); set('meta[name="description"]', "content", desc); set('meta[property="og:title"]', "content", p.title);
   set('meta[property="og:description"]', "content", desc); set('meta[property="og:url"]', "content", url); set('meta[property="og:type"]', "content", "article");
   set('meta[property="og:image"]', "content", img); set('meta[name="twitter:title"]', "content", p.title); set('meta[name="twitter:description"]', "content", desc);

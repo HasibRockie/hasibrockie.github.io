@@ -83,7 +83,7 @@ rd = lambda p: json.loads(p.read_text(encoding="utf-8"))
 
 # ---------- 1. round trip from an empty folder
 print("snapshot.py")
-tmp = Path(tempfile.mkdtemp()); out = tmp / "a"; out.mkdir()
+tmp = Path(tempfile.mkdtemp()); out = tmp / "a"; out.mkdir(); (out / "post").mkdir(); shutil.copy(ROOT / "post/index.html", out / "post/index.html")
 r = snap(out); ok(r.returncode == 0, "run succeeds: " + r.stderr[-200:])
 d, p = rd(out / "data.json"), rd(out / "posts.json")
 ok(d == DATA, "data.json identical to the original legacy file" + ("" if d == DATA else " (keys differing: %s)" % [k for k in DATA if d.get(k) != DATA.get(k)]))
@@ -100,7 +100,14 @@ ok(ex43["excerpt"] == (body.strip()[:220] if len(body.strip()) > 80 else ex43["e
 ok(rd(out / "site-settings.json") == {"preset": "paper"}, "site-settings.json")
 ok(not (out / "moments.json").exists(), "moments are never exported")
 sm = (out / "sitemap.xml").read_text(encoding="utf-8"); locs = re.findall(r"<loc>([^<]*)</loc>", sm)
-ok(len(locs) == 10 + len(POSTS) + 1 and "https://hasibrockie.github.io/post/?id=44" in locs and "https://hasibrockie.github.io/moments/" in locs and not any("id=45" in l or "id=46" in l for l in locs), "sitemap: 10 pages (incl. public moments) + all published posts, no drafts")
+ok(len(locs) == 10 + len(POSTS) + 1 and "https://hasibrockie.github.io/post/44/" in locs and "https://hasibrockie.github.io/moments/" in locs and not any("id=45" in l or "id=46" in l for l in locs), "sitemap: 10 pages (incl. public moments) + all published posts, no drafts")
+pg = out / "post" / "44" / "index.html"
+ok(pg.exists() and not (out / "post" / "45").exists(), "static page for each published post only")
+if pg.exists():
+    t = pg.read_text(encoding="utf-8")
+    ok('<link rel="canonical" href="https://hasibrockie.github.io/post/44/">' in t and 'og:type" content="article"' in t and 'data-post-id="44"' in t and 'data-root="../../"' in t, "static page: canonical, og:type, id, root")
+    ok("<script>" not in t.replace('<script type="application/ld+json" id="ld-article">', "") and '"@type": "Article"' in t, "static page: only JSON-LD inline script (CSP)")
+    ok('../../assets/js/app.js' in t and "<p>" in t, "static page: assets resolved and text present for crawlers")
 ok(sm.startswith('<?xml') and "<urlset" in sm and "&" not in sm.replace("&amp;", ""), "sitemap is valid-looking XML")
 ok(all(h[1] == KEYV for h in STATE["hits"]), "every request used the public key only")
 

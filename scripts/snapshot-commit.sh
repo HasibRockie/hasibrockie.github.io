@@ -6,6 +6,7 @@ FILES="data.json posts.json posts-index.json site-settings.json sitemap.xml"
 git config user.name  "github-actions[bot]"
 git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 for f in $FILES; do [ -f "$f" ] && git add -f "$f"; done
+[ -d post ] && git add -A post/                    # static post pages (new, changed and removed)
 push() { git push || { git pull --rebase --autostash && git push; }; }
 if git diff --cached --quiet; then
   last=$(git log -1 --format=%ct); now=$(date +%s); age=$(( (now - last) / 86400 ))
