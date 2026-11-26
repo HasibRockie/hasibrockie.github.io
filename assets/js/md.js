@@ -1,7 +1,9 @@
 // md.js - Markdown for NEW posts only (legacy posts stay plain text). Libraries are self-hosted and loaded on demand.
 const R = (document.body && document.body.dataset.root) || "";
-const TAGS = ["p", "br", "strong", "em", "b", "i", "u", "s", "del", "code", "pre", "blockquote", "ul", "ol", "li", "h2", "h3", "h4", "hr", "a", "img", "table", "thead", "tbody", "tr", "th", "td", "sup", "sub"];
+const TAGS = ["p", "br", "strong", "em", "b", "i", "u", "s", "del", "code", "pre", "blockquote", "ul", "ol", "li", "h2", "h3", "h4", "hr", "a", "img", "table", "thead", "tbody", "tr", "th", "td", "sup", "sub", "figure"];
 let loading = null, hooked = false;
+// "::: verse" ... ":::" (a poem: centred, line breaks kept) becomes a <figure>; the editor's Verse button writes this.
+export const verseBlocks = (t) => String(t || "").replace(/^:::[ \t]*verse[ \t]*\n([\s\S]*?)\n:::[ \t]*$/gim, (m, body) => `<figure>\n\n${body}\n\n</figure>`);
 function load() {
   if (window.marked && window.DOMPurify) return Promise.resolve();
   return (loading ||= new Promise((res, rej) => {
@@ -17,6 +19,6 @@ export async function renderMd(text) {
   const P = window.DOMPurify;
   if (!hooked) { P.addHook("afterSanitizeAttributes", (n) => { if (n.tagName === "A") { n.setAttribute("rel", "noopener noreferrer"); n.setAttribute("target", "_blank"); } }); hooked = true; }
   // markdown "# Heading" becomes h2 (the post title is the page's only h1)
-  const raw = window.marked.parse(String(text || ""), { breaks: true, gfm: true }).replace(/<(\/?)h1\b/g, "<$1h2");
+  const raw = window.marked.parse(verseBlocks(text), { breaks: true, gfm: true }).replace(/<(\/?)h1\b/g, "<$1h2");
   return P.sanitize(raw, { ALLOWED_TAGS: TAGS, ALLOWED_ATTR: ["href", "src", "alt", "title"], ALLOW_DATA_ATTR: false, FORBID_ATTR: ["style"] });
 }

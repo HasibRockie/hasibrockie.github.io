@@ -1,5 +1,5 @@
 // data.js - API first, cache for instant paint, static snapshot if the API is slow/down/paused.
-import { dataFromTables, listItemFromLegacy, normPost } from "./legacy.js?v=202611270253";
+import { dataFromTables, listItemFromLegacy, normPost } from "./legacy.js?v=202611270310";
 
 const cfg = window.SITE_CONFIG || {};
 const R = (document.body && document.body.dataset.root) || "";

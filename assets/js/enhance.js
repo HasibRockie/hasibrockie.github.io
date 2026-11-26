@@ -1,6 +1,6 @@
 // enhance.js - progressive touches after each render: scroll reveal, sticky-header shadow, back-to-top, reading progress,
 // share buttons, gallery lightbox, contact form. Everything degrades to plain content without it.
-import { openLightbox } from "./lightbox.js?v=202611270253";
+import { openLightbox } from "./lightbox.js?v=202611270310";
 const cfg = window.SITE_CONFIG || {};
 const apiOn = /^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(cfg.SUPABASE_URL || "") && !!cfg.SUPABASE_ANON_KEY;
 let io = null, scrollBound = false;

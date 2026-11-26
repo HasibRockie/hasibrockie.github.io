@@ -461,6 +461,12 @@ h1:lang(bn),h2:lang(bn),h3:lang(bn),:lang(bn) h1,:lang(bn) h2,:lang(bn) h3,b:lan
 .article h1:lang(bn),.article:lang(bn) h1{font-size:clamp(2rem,4.6vw,3rem);line-height:1.35}
 .article .meta,.article .back,.share,.pn small{font-family:var(--sans)}
 .md h2,.md h3{font-family:var(--bn);font-weight:600}
+/* scene break (--- or * * *) as a centred ornament, and "::: verse" poems */
+.md hr{border:0;height:auto;margin:2.2rem 0;text-align:center;overflow:visible}
+.md hr::after{content:"✻  ✻  ✻";color:var(--signal);letter-spacing:.5em;font-size:.95rem}
+.md figure{margin:2rem auto;padding:1.2rem 1rem;max-width:34em;text-align:center;border-top:1px solid var(--line);border-bottom:1px solid var(--line);font-family:var(--bn)}
+.md figure p{margin-bottom:1rem;line-height:1.9}.md figure p:last-child{margin-bottom:0}
+.md u{text-decoration-thickness:1px;text-underline-offset:.25em}
 
 /* ---------- footer ---------- */
 footer{position:relative;margin-top:var(--s6);border-top:1px solid var(--line);background:color-mix(in srgb,var(--surface) 60%,var(--bg));padding:var(--s5) 0 var(--s3)}
