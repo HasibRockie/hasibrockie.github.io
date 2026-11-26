@@ -2,6 +2,7 @@
 import { loadBundle, loadPost } from "./data.js";
 import { initSettings, applySeo } from "./theme.js";
 import * as V from "./render.js";
+import { trackView } from "./track.js";
 
 const P = document.body.dataset.page, main = document.getElementById("main");
 let S = (window.SiteBoot && window.SiteBoot.current()) || window.SiteSettings.validate({}).clean;
@@ -45,6 +46,7 @@ if (P === "404") {                                   // static message stays; we
   if (P === "post") {
     const id = new URLSearchParams(window.location.search).get("id");
     if (!/^\d+$/.test(id || "")) { postMeta = { notFound: true }; renderPage(); }
-    else loadPost(id, (p, m) => { post = p; postMeta = m; if (!p && !m.notFound && !bundle) { main.innerHTML = V.errorState(); return; } renderPage(); });
+    else loadPost(id, (p, m) => { post = p; postMeta = m; if (p) trackView("post", id); if (!p && !m.notFound && !bundle) { main.innerHTML = V.errorState(); return; } renderPage(); });
   }
 } else renderPage();
+if (P !== "post") trackView(P);

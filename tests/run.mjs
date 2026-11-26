@@ -2,7 +2,7 @@
 // Every scenario runs in its own process because the site's modules read config at load time.
 import fs from "node:fs"; import path from "node:path"; import { fileURLToPath, pathToFileURL } from "node:url"; import { spawnSync } from "node:child_process"; import { JSDOM } from "jsdom";
 const here = path.dirname(fileURLToPath(import.meta.url)), root = path.join(here, ".."), SC = process.argv[2];
-const SCENARIOS = ["shells", "api-ok", "api-down", "api-slow", "cache-stale-down", "cache-fresh", "post-md", "post-legacy", "post-missing", "writing", "preview", "moments", "404"];
+const SCENARIOS = ["shells", "api-ok", "api-down", "api-slow", "cache-stale-down", "cache-fresh", "post-md", "post-legacy", "post-missing", "writing", "preview", "moments", "404", "views"];
 if (!SC) {
   let bad = 0; for (const s of SCENARIOS) { const r = spawnSync(process.execPath, [fileURLToPath(import.meta.url), s], { stdio: "inherit", env: process.env }); if (r.status) bad++; }
   console.log(bad ? `\n${bad} scenario(s) FAILED` : `\nAll ${SCENARIOS.length} scenarios passed`); process.exit(bad ? 1 : 0);
@@ -165,6 +165,18 @@ const run = {
     ok(e.$$(".moment-photo img").every((i) => i.src.includes("/storage/v1/object/sign/moments-private/")), "images use short-lived signed URLs"); ok(/&lt;b&gt;|<b>/.test(e.$(".moment-caption").innerHTML) && !e.$(".moment-caption b"), "captions are escaped");
     ok(e.w.sessionStorage.getItem("mm:tok") && !Object.keys(e.w.localStorage).some((k) => /moment|T"/.test(k + e.w.localStorage.getItem(k))), "token only in sessionStorage; nothing private in localStorage");
     e.$("#lock").click(); await waitFor(() => e.$("#mf")); ok(!e.w.sessionStorage.getItem("mm:tok"), "Lock clears the session");
+  },
+  async views() {
+    const rpc = (e) => e.fetchImpl.calls.filter((c) => c === "/rest/v1/rpc/track_view").length;
+    const e = await boot("post", { query: "?id=44" }); await waitFor(() => e.$(".md strong"), 5000); await sleep(50);
+    ok(rpc(e) === 1, "post view counted once: " + rpc(e)); const seen = JSON.parse(e.w.localStorage.getItem("sc:v1:seen"));
+    ok(Object.keys(seen).join() === "post:44" && /^\d{4}-\d\d-\d\d$/.test(seen["post:44"]), "seen mark stored per page+day: " + JSON.stringify(seen));
+    const { trackView } = await import(pathToFileURL(path.join(root, "assets/js/track.js")).href);
+    trackView("post", "44"); ok(rpc(e) === 1, "same page same day is not counted again");
+    trackView("about"); ok(rpc(e) === 2, "a different page is counted"); trackView("404"); trackView("bad key"); trackView("post", "1;drop"); ok(rpc(e) === 2, "404 and invalid keys ignored");
+    e.w.localStorage.setItem("sc:v1:seen", JSON.stringify({ "post:44": "2000-01-01", old: "2000-01-01" })); trackView("post", "44");
+    ok(rpc(e) === 3 && !("old" in JSON.parse(e.w.localStorage.getItem("sc:v1:seen"))), "counted again the next day; old marks pruned");
+    Object.defineProperty(e.w, "top", { value: {}, configurable: true }); trackView("journey"); ok(rpc(e) === 3, "not counted inside the admin preview frame");
   },
   async 404() {
     const e = await boot("404", { mode: "down" }); await sleep(400); ok(/Page not found/.test(e.$("#main").textContent), "404 message stays even when the API is down"); ok(!!e.$("header.top") && !!e.$("footer"), "header and footer present");
